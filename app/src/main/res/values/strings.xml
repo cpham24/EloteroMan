@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Elotero Man</string>
+    <string name="display_login_name">Login Page</string>
+    <string name="display_profile_name">Profile Page</string>
+    <string name="display_map_name">Map Page</string>
+    <string name="display_vendor_name">Vendor Page</string>
+    <string name="display_settings_name">Settings Page</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="edu.calstatela.cpham24.eloteroman.MainActivity">
+
+    <TextView
+        android:id="@+id/debugMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:text="[Debug Mode] select a button to go to Activity page" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Login Page"/>
+
+        <Button
+            android:id="@+id/profileBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Profile Page"/>
+
+        <Button
+            android:id="@+id/mapBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Map Page"/>
+
+        <Button
+            android:id="@+id/vendorBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Vendor Page"/>
+
+        <Button
+            android:id="@+id/settingsBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Settings Page"/>
+
+    </LinearLayout>
+
+</LinearLayout>

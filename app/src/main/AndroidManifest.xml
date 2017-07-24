@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.calstatela.cpham24.eloteroman">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".DisplayActivities.DisplayLoginActivity"
+                  android:label="@string/display_login_name"
+                  android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplayProfileActivity"
+                  android:label="@string/display_profile_name"
+                  android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplayMapActivity"
+                  android:label="@string/display_map_name"
+                  android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplayVendorActivity"
+                  android:label="@string/display_vendor_name"
+                  android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplaySettingsActivity"
+                  android:label="@string/display_settings_name"
+                  android:parentActivityName=".MainActivity"/>
+    </application>
+
+</manifest>
