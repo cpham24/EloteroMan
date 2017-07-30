@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplaySettingsActivity">
+    tools:context="edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplaySearchActivity">
 
 </android.support.constraint.ConstraintLayout>

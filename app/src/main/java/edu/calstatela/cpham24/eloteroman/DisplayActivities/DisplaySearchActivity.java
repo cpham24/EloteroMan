@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import edu.calstatela.cpham24.eloteroman.R;
 
-public class DisplaySettingsActivity extends AppCompatActivity {
+public class DisplaySearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_settings);
+        setContentView(R.layout.activity_display_search);
     }
 }

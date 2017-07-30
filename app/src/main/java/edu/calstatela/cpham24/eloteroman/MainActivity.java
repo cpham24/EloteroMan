@@ -2,15 +2,15 @@ package edu.calstatela.cpham24.eloteroman;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayLoginActivity;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayMapActivity;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayProfileActivity;
-import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplaySettingsActivity;
+import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplaySearchActivity;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayVendorActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Button profileBtn  = (Button) findViewById(R.id.profileBtn);
         Button mapBtn      = (Button) findViewById(R.id.mapBtn);
         Button vendorBtn   = (Button) findViewById(R.id.vendorBtn);
-        Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
+        Button searchBtn = (Button) findViewById(R.id.searchBtn);
 
         // get a reference to the main context
         final Context main = this;
@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(main, DisplaySettingsActivity.class);
+                Intent i = new Intent(main, DisplaySearchActivity.class);
                 startActivity(i);
             }
         });

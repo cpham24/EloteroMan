@@ -52,11 +52,11 @@
             android:text="Vendor Page"/>
 
         <Button
-            android:id="@+id/settingsBtn"
+            android:id="@+id/searchBtn"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:text="Settings Page"/>
+            android:text="Search Page"/>
 
     </LinearLayout>
 

@@ -28,8 +28,8 @@
         <activity android:name=".DisplayActivities.DisplayVendorActivity"
                   android:label="@string/display_vendor_name"
                   android:parentActivityName=".MainActivity"/>
-        <activity android:name=".DisplayActivities.DisplaySettingsActivity"
-                  android:label="@string/display_settings_name"
+        <activity android:name=".DisplayActivities.DisplaySearchActivity"
+                  android:label="@string/display_search_name"
                   android:parentActivityName=".MainActivity"/>
     </application>
 

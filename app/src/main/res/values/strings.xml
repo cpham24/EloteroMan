@@ -4,5 +4,5 @@
     <string name="display_profile_name">Profile Page</string>
     <string name="display_map_name">Map Page</string>
     <string name="display_vendor_name">Vendor Page</string>
-    <string name="display_settings_name">Settings Page</string>
+    <string name="display_search_name">Search Page</string>
 </resources>
