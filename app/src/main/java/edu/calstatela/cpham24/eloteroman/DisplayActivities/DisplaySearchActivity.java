@@ -22,11 +22,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -54,7 +52,6 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
     private EditText search;
     private Button searchBut;
     private Button advSe;
-    Spinner spinner;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private double longitude;
     private double latitude;
@@ -66,16 +63,6 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_search);
-
-        int LOCATION_REFRESH_TIME = 1000;
-        int LOCATION_REFRESH_DISTANCE = 5;
-
-        /*
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME,
-                LOCATION_REFRESH_DISTANCE, mLocationListener);
-                */
 
         handlePermissionsAndGetLocation();
 
@@ -94,7 +81,6 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
                 Log.d(TAG, " cmon " + search.getText().toString() );
 
-                //Doesn't take any queries from user, just simply displays all carts for testing purposes
                 load(search.getText().toString());
 
             }
@@ -121,18 +107,8 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
             }
         });
 
-        spinner = (Spinner) findViewById(R.id.choice_spinner);
 
 
-        ArrayAdapter<CharSequence> spindapter = ArrayAdapter.createFromResource(this,
-                R.array.simpleSort, android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears
-        spindapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(spindapter);
-
-        spinner.setOnItemSelectedListener(this);
 
 
 

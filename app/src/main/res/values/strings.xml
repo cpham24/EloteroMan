@@ -6,12 +6,6 @@
     <string name="display_vendor_name">Vendor Page</string>
     <string name="display_search_name">Search Page</string>
 
-    <string-array name="simpleSort">
-        <item>Distance</item>
-        <item>Alphabetical</item>
-    </string-array>
-
-
     <string-array name="numberTime">
         <item></item>
         <item>1</item>
@@ -29,6 +23,7 @@
     </string-array>
 
     <string-array name="timeOfDay">
+        <item></item>
         <item>AM</item>
         <item>PM</item>
     </string-array>
