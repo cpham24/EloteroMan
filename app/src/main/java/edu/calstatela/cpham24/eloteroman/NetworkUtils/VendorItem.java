@@ -15,6 +15,7 @@ public class VendorItem {
     public boolean in_service;
     public VendorLocationItem location;
     public ArrayList<FoodItem> food_list;
+    public String marker_id;
 
     public VendorItem() {
         // empty constructor

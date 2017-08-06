@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -77,7 +78,6 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 if (location != null) {
                     LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "my current position is " + location.getLatitude() + ", " + location.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(current).title("My Position"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, (float) 10.0));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000, null);
                 }
@@ -120,13 +120,31 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             // overriding onLoadFinished to load from db into view
             @Override
             public void onLoadFinished(Loader<Void> loader, Void data) {
-                // TODO: handle locations and vendors data and add markers for nearby vendors
                 Log.d(TAG, "loaded data for " + vendors.size() + " vendors from network");
 
                 for(int i=0; i<vendors.size(); i++) {
                     VendorItem v = vendors.get(i);
                     mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name));
                     Log.d(TAG, "added a marker for " + v.cart_name);
+
+                    // enables interaction with the markers
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(Marker marker) {
+                            VendorItem vendor = null;
+
+                            for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
+                                LatLng pos = marker.getPosition();
+                                VendorItem v = vendors.get(i);
+                                if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
+                                    vendor = v;
+                            }
+
+                            if(vendor != null)
+                                Log.d(TAG, "user clicked on " + vendor.cart_name + " owned by " + vendor.owner_name);
+                            return false;
+                        }
+                    });
                 }
             }
 
