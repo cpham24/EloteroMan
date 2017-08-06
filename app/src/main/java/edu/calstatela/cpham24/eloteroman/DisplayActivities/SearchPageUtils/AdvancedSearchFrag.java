@@ -1,7 +1,8 @@
-package com.example.johnson.elosearch;
+package edu.calstatela.cpham24.eloteroman.DisplayActivities.SearchPageUtils;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import edu.calstatela.cpham24.eloteroman.R;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Johnson on 8/1/2017.
@@ -32,7 +37,7 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
     }
 
     public interface OnDialogCloseListener {
-        void closeDialog(String ca, String ve, String fo, String le, String ri, String on, String tw);
+        void closeDialog(String ca, String ve, String fo, String le, String ri, String on, String tw, String dw);
     }
 
     @Override
@@ -79,6 +84,13 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
         curTimeTwo.setAdapter(spindapterThree);
         curTimeTwo.setOnItemSelectedListener(this);
 
+        theDay = (Spinner) view.findViewById(R.id.dayWork);
+        ArrayAdapter<CharSequence> spindapterFour = ArrayAdapter.createFromResource(view.getContext(),
+                R.array.theDayMan, android.R.layout.simple_spinner_item);
+        spindapterThree.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        theDay.setAdapter(spindapterFour);
+        theDay.setOnItemSelectedListener(this);
+
 
         searchEm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,8 +105,11 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
                 String ri = rightTime.getSelectedItem().toString();
                 String on = curTimeOne.getSelectedItem().toString();
                 String tw = curTimeTwo.getSelectedItem().toString();
+                String dw = curTimeTwo.getSelectedItem().toString();
 
-                //activity.closeDialog(ca, ve, fo, le, ri, on, tw);
+                Log.d(TAG, " where " + ca);
+
+                activity.closeDialog(ca, ve, fo, le, ri, on, tw, dw);
                 AdvancedSearchFrag.this.dismiss();
             }
         });

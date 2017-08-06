@@ -1,4 +1,4 @@
-package edu.calstatela.cpham24.eloteroman.DisplayActivities;
+package edu.calstatela.cpham24.eloteroman.DisplayActivities.SearchPageUtils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -56,9 +56,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
     }
 
     @Override
-    public int getItemCount() {
-        return this.data.size();
-    }
+    public int getItemCount() { return this.data.size(); }
 
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name;
