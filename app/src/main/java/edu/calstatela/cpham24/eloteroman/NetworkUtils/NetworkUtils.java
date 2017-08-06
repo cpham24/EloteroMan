@@ -25,6 +25,9 @@ public final class NetworkUtils {
     private static final String ELOTERO_QUERY_LOCATION_ALL = "getLocations";
     private static final String ELOTERO_QUERY_LOCATION_ONE = "getOneLocation";
     private static final String ELOTERO_QUERY_LOCATION_CONDITIONAL = "findLocationWhere";
+    private static final String ELOTERO_QUERY_VENDOR_ALL = "getCarts";
+    private static final String ELOTERO_QUERY_VENDOR_ONE = "getOneCart";
+    private static final String ELOTERO_QUERY_VENDOR_CONDITIONAL = "findCartWhere";
 
     // parameter names for news api
     final static String PARAM_ID = "_id";
@@ -64,6 +67,20 @@ public final class NetworkUtils {
      */
     public static URL buildLocationUrl(String id) {
         Uri builtUri = Uri.parse(ELOTERO_API_URL + ELOTERO_QUERY_LOCATION_ONE).buildUpon()
+                .appendQueryParameter(PARAM_ID, id)
+                .build();
+
+        return buildUrl(builtUri);
+    }
+
+    public static URL buildVendorUrl() {
+        Uri builtUri = Uri.parse(ELOTERO_API_URL + ELOTERO_QUERY_VENDOR_ALL);
+
+        return buildUrl(builtUri);
+    }
+
+    public static URL buildVendorUrl(String id) {
+        Uri builtUri = Uri.parse(ELOTERO_API_URL + ELOTERO_QUERY_VENDOR_ONE).buildUpon()
                 .appendQueryParameter(PARAM_ID, id)
                 .build();
 
