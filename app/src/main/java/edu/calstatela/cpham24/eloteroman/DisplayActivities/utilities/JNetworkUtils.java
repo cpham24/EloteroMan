@@ -40,6 +40,7 @@ public class JNetworkUtils {
     private static final String COLLECTION_FOOD="food";
 
     private static final String ID_PARAM="id";
+    private static final String USERNAME_PARAM="username";
 
 
     public static URL buildUrlCollectionFieldLike(String collection, String field, String like){
@@ -96,6 +97,25 @@ public class JNetworkUtils {
         return url;
     }
 
+    //example http://162.243.112.34:3000/Eloteroman/findUsersWhere?username=Bear
+    public static URL buildUrlGetOneUserWithUsername(String username){
+        Log.d("Comments", "_______________________buildUrlForUser______________________");
+        Uri builtUri=
+                Uri.parse(ELOTEROMAN_BASE_URL+"/"+"findUsersWhere").buildUpon()
+                        .appendQueryParameter(USERNAME_PARAM,username)
+                        .build();
+        URL url=null;
+
+        try{
+            url=new URL (builtUri.toString());
+        }catch(MalformedURLException e){
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built Uri: " + url);
+        return url;
+    }
+
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -127,10 +147,12 @@ public class JNetworkUtils {
         JSONObject main = new JSONObject(json);
         JSONArray items = main.getJSONArray("favoriteFoodCarts");
 
+        String id=main.getString("_id");
         String username = main.getString("username");
         String name = main.getString("name");
         String avatar = main.getString("avatar");
         String isPublic = main.getString("public");
+
 
 
         for(int i = 0; i < items.length(); i++){
@@ -140,7 +162,37 @@ public class JNetworkUtils {
 
         }
 
-        result= new user(username,name,avatar,isPublic,favoriteFoodCartIds);
+        result= new user(id,username,name,avatar,isPublic,favoriteFoodCartIds);
+        Log.d("Comments", result.getUsername());
+
+        return result;
+    }
+
+    public static user parseLoginUserJSON(String json) throws JSONException {
+        Log.d("Comments", "_______________________parseUserJason______________________");
+        user result;
+        String FoodCartId="";
+        ArrayList<String> favoriteFoodCartIds = new ArrayList<>();
+        JSONArray mainArr=new JSONArray(json);
+        JSONObject main = mainArr.getJSONObject(0);
+        JSONArray items = main.getJSONArray("favoriteFoodCarts");
+
+        String id=main.getString("_id");
+        String username = main.getString("username");
+        String name = main.getString("name");
+        String avatar = main.getString("avatar");
+        String isPublic = main.getString("public");
+
+
+
+        for(int i = 0; i < items.length(); i++){
+            FoodCartId= items.getString(i);
+            favoriteFoodCartIds.add(FoodCartId);
+            Log.d("Comments",FoodCartId );
+
+        }
+
+        result= new user(id,username,name,avatar,isPublic,favoriteFoodCartIds);
         Log.d("Comments", result.getUsername());
 
         return result;

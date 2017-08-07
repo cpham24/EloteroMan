@@ -8,18 +8,28 @@ import java.util.ArrayList;
 
 public class user {
 
+    String id;
     String username;
     String name;
     String avatar;
     String isPublic;
     ArrayList<String> favoriteFoodCarts;
 
-    public user(String username, String name, String avatar, String isPublic, ArrayList<String> favoriteFoodCarts) {
+    public user(String id, String username, String name, String avatar, String isPublic, ArrayList<String> favoriteFoodCarts) {
+        this.id=id;
         this.username = username;
         this.name = name;
         this.avatar = avatar;
         this.isPublic = isPublic;
         this.favoriteFoodCarts = favoriteFoodCarts;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ArrayList<String> getFavoriteFoodCarts() {

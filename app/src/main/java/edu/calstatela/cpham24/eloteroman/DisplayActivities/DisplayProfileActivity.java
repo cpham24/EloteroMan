@@ -39,9 +39,9 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     ImageView pictureIV;
     ProgressBar mProgress;
     private SharedPreferences userPrefs;
+    String USER_PREFS="user";
     Context context=this;
     final String id = "596d335cb158f84ac6fb474d";
-    String USER_PREFS="user";
     static final String TAG = "profileActivity";
     String user_id;
     user current_user;
@@ -71,10 +71,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
 
         userPrefs = getSharedPreferences(USER_PREFS, 0);
-        SharedPreferences.Editor edit=userPrefs.edit();
-        edit.putString("id",id);
-        edit.putBoolean("isLoggedIn",true);
-        edit.commit();
+
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 
