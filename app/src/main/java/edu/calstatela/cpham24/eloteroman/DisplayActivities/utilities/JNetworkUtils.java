@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.favoriteCart;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.location;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.user;
 
@@ -76,16 +77,35 @@ public class JNetworkUtils {
         return url;
     }
 
+    //example http://162.243.112.34:3000/Eloteroman/getOneCart?id=5983e79f0df161632aa3ad62
+    public static URL buildUrlGetOneCart(String id){
+        Log.d("Comments", "_______________________buildUrlForCArt______________________");
+        Uri builtUri=
+                Uri.parse(ELOTEROMAN_BASE_URL+"/"+"getOneCart").buildUpon()
+                        .appendQueryParameter(ID_PARAM,id)
+                        .build();
+        URL url=null;
+
+        try{
+            url=new URL (builtUri.toString());
+        }catch(MalformedURLException e){
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built Uri: " + url);
+        return url;
+    }
+
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         Log.d("Comments", "_______________________getResponse______________________");
         try{
-            Log.d("Comments", "_______________________IsItHere1?______________________");
+
             InputStream in = urlConnection.getInputStream();
-            Log.d("Comments", "_______________________IsItHere2?______________________");
+
             Scanner scanner = new Scanner(in);
-            Log.d("Comments", "_______________________IsItHere3?______________________");
+
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
@@ -126,27 +146,26 @@ public class JNetworkUtils {
         return result;
     }
 
-    public static ArrayList<location> parseLocationJSON(String json) throws JSONException {
-        ArrayList<location> result = new ArrayList<>();
+    public static favoriteCart parseFavoriteCartJSON(String json) throws JSONException {
+        Log.d("Comments", "_______________________parseCartJson______________________");
+        favoriteCart result;
+//        ArrayList<String> favoriteFoodCartIds = new ArrayList<>();
+        Log.d("Comments", json);
         JSONObject main = new JSONObject(json);
-        JSONArray items = main.getJSONArray("articles");
 
 
-        for(int i = 0; i < items.length(); i++){
-            JSONObject item = items.getJSONObject(i);
-            String locationId = item.getString("locationId");
-            String cartId = item.getString("cartId");
-            String street = item.getString("street");
-            String city = item.getString("city");
-            String zip = item.getString("zip");
-            Double currentLatitude= Double.valueOf(item.getString("currentLatitude"));
-            Double currentLongitude= Double.valueOf(item.getString("currentLongitude"));
-            Double previousLatitude= Double.valueOf(item.getString("previousLatitude"));
-            Double previousLongitude= Double.valueOf(item.getString("previousLongitude"));
-            location Loc = new location( locationId,  cartId,  street,  city,  zip,  currentLatitude,currentLongitude,previousLatitude,previousLongitude);
 
-            result.add(Loc);
-        }
+        String id = main.getString("_id");
+        String name = main.getString("cartName");
+        String address = main.getString("street");
+        String time = main.getString("hours");
+        String url = main.getString("picture");
+
+
+
+
+        result= new favoriteCart(id,name,address,time,url);
+        Log.d("Comments", result.getId());
 
         return result;
     }

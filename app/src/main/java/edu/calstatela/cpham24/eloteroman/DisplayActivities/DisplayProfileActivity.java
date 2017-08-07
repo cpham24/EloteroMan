@@ -1,24 +1,33 @@
 package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
+import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.favoriteCart;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.user;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.utilities.JNetworkUtils;
+import edu.calstatela.cpham24.eloteroman.DisplayActivities.utilities.favoriteCartAdapter;
 import edu.calstatela.cpham24.eloteroman.R;
 
 public class DisplayProfileActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
@@ -27,26 +36,38 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     TextView nameTV;
     TextView isPublicTV;
     TextView foodCartsTV;
+    ImageView pictureIV;
     ProgressBar mProgress;
     private SharedPreferences userPrefs;
+    Context context=this;
     final String id = "596d335cb158f84ac6fb474d";
     String USER_PREFS="user";
+    static final String TAG = "profileActivity";
     String user_id;
     user current_user;
     int USER_LOADER_ID=1;
     private Bundle bundleForLoader = null;
-
+    private RecyclerView mRecyclerView;
+    private favoriteCartAdapter mcartAdapter;
+    ArrayList<favoriteCart> cartList=new ArrayList<favoriteCart>();
+    ArrayList<String> ids;
+    String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_profile);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_carts);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
         mProgress = (ProgressBar) findViewById(R.id.userProgressBar);
         usernameTV =(TextView) findViewById(R.id.usernameView);
         nameTV =(TextView) findViewById(R.id.nameView);
         isPublicTV =(TextView) findViewById(R.id.isPublicView);
         foodCartsTV =(TextView) findViewById(R.id.favoriteFoodCartsView);
-
+        pictureIV =(ImageView) findViewById(R.id.avatarView);
 
 
         userPrefs = getSharedPreferences(USER_PREFS, 0);
@@ -76,12 +97,14 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
 
         return new AsyncTaskLoader<Void>(this) {
+            favoriteCart current_cart;
 
             @Override
             public void onStartLoading() {
                 super.onStartLoading();
                 //makes progress bar visible
-                mProgress.setVisibility(View.VISIBLE);
+                if (current_user==null)
+                    mProgress.setVisibility(View.VISIBLE);
                 Log.d("Comments", "_______________________onStartLoading______________________");
             }
 
@@ -92,6 +115,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
                 Log.d("Comments", "_______________________onLoadInBackground______________________");
                 try {
+
                     String json = JNetworkUtils.getResponseFromHttpUrl(url);
                     current_user = JNetworkUtils.parseUserJSON(json);
 
@@ -103,6 +127,42 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
                 }
 
 
+
+            if(current_user!=null) {
+                ids = current_user.getFavoriteFoodCarts();
+                if (ids != null) {
+                    for (int i = 0; i < ids.size(); i++) {
+                        URL cart_url = JNetworkUtils.buildUrlGetOneCart(ids.get(i));
+                        try {
+
+
+                            Log.d("Comments", "_______________________here1?______________________");
+                            String cart_json = JNetworkUtils.getResponseFromHttpUrl(cart_url);
+                            Log.d("Comments", "_______________________here2?______________________");
+                            current_cart = JNetworkUtils.parseFavoriteCartJSON(cart_json);
+                            Log.d("Comments", "_______________________here3?______________________");
+
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("Comments", "_______________________here4?______________________");
+
+                        if(current_cart!=null) {
+                            cartList.add(current_cart);
+                        }
+                    }
+                }
+
+
+            }
+
+
+
                 return null;
             }
         };
@@ -111,11 +171,31 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     @Override
     public void onLoadFinished(Loader<Void> loader,Void data) {
         Log.d("Comments", "_______________________onLoadFinished______________________");
-        mProgress.setVisibility(View.INVISIBLE);
-        usernameTV.setText("Username: "+current_user.getUsername());
-        nameTV.setText("Name: "+current_user.getName());
-        isPublicTV.setText("Public: "+current_user.getIsPublic());
-        foodCartsTV.setText("Favorite Food Carts : "+current_user.getFavoriteFoodCarts());
+        if(current_user!=null){
+            mProgress.setVisibility(View.INVISIBLE);
+            usernameTV.setText("Username: "+current_user.getUsername());
+            nameTV.setText("Name: "+current_user.getName());
+            isPublicTV.setText("Public: "+current_user.getIsPublic());
+            imageUrl=current_user.getAvatar();
+            if(imageUrl != null) {
+                Picasso.with(context)
+                        .load(imageUrl)
+                        .into(pictureIV);
+            }
+
+            if(cartList!=null) {
+                mcartAdapter = new favoriteCartAdapter(cartList, new favoriteCartAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(int clickedItemIndex,String cartId) {
+
+                        Log.d(TAG, String.format("id: %s", cartId));
+                        Toast.makeText(context, "id: "+cartId, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                mRecyclerView.setAdapter(mcartAdapter);
+            }
+
+        }
 
     }
 
