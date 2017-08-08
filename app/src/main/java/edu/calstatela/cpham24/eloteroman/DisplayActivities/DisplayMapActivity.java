@@ -45,7 +45,7 @@ import edu.calstatela.cpham24.eloteroman.R;
 public class DisplayMapActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "DisplayMapActivity";
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
-    private static final float DEFAULT_ZOOM = (float) 17.3; // shows the neighborhood
+    private static final float DEFAULT_ZOOM = (float) 16.5; // shows the neighborhood
     private static final int LOCATIONSLOADER = 69;
 
     private GoogleMap mMap;
@@ -70,6 +70,14 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             }
         });
 
+        findViewById(R.id.appbar).bringToFront();
+        findViewById(R.id.locator_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation();
+            }
+        });
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -78,6 +86,8 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                mMap.getUiSettings().setMapToolbarEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 getCurrentLocation();
                 loadData();
             }
@@ -97,10 +107,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 if (location != null) {
                     LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "my current position is " + location.getLatitude() + ", " + location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, (float) 10.0));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000, null);
-                    mMap.getUiSettings().setMapToolbarEnabled(false);
-                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, DEFAULT_ZOOM), 1000, null);
                 }
             }
         });
