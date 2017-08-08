@@ -14,7 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.Vender;
@@ -29,13 +28,20 @@ public class NetworkUtils {
 
 
     public static final String ELO_BASE_URL =
-            "http://162.243.112.34:3000/EloteroMan/findCartsWhere";
+            "http://162.243.112.34:3000/EloteroMan/";
+
+    public static final String getCarts = "getCarts";
+    public static final String getReviews = "findReviewsWhere";
+
+    final static String API_LOCATION_ID = "_id";
+
+    public static final String PARAM_REV = "cartId";
 
 
     public static URL makeURL(){
         Uri uri;
 
-        uri = Uri.parse(ELO_BASE_URL).buildUpon()
+        uri = Uri.parse(ELO_BASE_URL + getCarts).buildUpon()
                     .build();
 
 
@@ -56,6 +62,34 @@ public class NetworkUtils {
 
         return url;
     }
+
+
+    public static URL makeURLrev(String cart){
+        Uri uri;
+
+        uri = Uri.parse(ELO_BASE_URL + getReviews).buildUpon()
+                .appendQueryParameter(PARAM_REV, cart)
+                .build();
+
+
+
+        Log.d(TAG, "U who meeeeeeeeeeeeeee");
+
+        URL url = null;
+        try{
+            String urlString= uri.toString();
+            Log.d(TAG, "Url: ffgo " + urlString);
+            url = new URL(uri.toString());
+
+        }
+        catch(MalformedURLException e) {
+            e.printStackTrace();
+
+        }
+
+        return url;
+    }
+
 
 
 
@@ -84,7 +118,7 @@ public class NetworkUtils {
 
 
 
-    public static ArrayList<Vender> parseJSON(String json, String check, double longitude, double latitutde) throws JSONException {
+    public static ArrayList<Vender> parseJSON(String json, String check, String sorted, double longitude, double latitude) throws JSONException {
 
         ArrayList<Vender> result = new ArrayList<>();
         JSONArray items = new JSONArray(json);
@@ -94,8 +128,11 @@ public class NetworkUtils {
 
         for (int i = 0; i < items.length(); i++){
             JSONObject item = items.getJSONObject(i);
+            String rot = item.getString(API_LOCATION_ID);
+            Log.d(TAG , " find the id: " + rot);
             String Oname = item.getString("ownerName");
             String name = item.getString("cartName");
+            String stree = item.getString("street");
             String desc = item.getString("days");
             String WoH = item.getString("hours");
             String WoY = item.getString("currentlyInService");
@@ -103,6 +140,8 @@ public class NetworkUtils {
             JSONObject loc = item.getJSONObject("location");
             JSONArray fair = loc.getJSONArray("coordinates");
             String[] there = new String[2];
+
+
 
             for (int g = 0; g < there.length; ++g) {
                 there[g] = fair.getString(g);
@@ -116,9 +155,10 @@ public class NetworkUtils {
                 Log.d(TAG , " come1 " + i);
                 if (name.toLowerCase().contains(check.toLowerCase()) || desc.toLowerCase().contains(check.toLowerCase()) ||
                         WoH.toLowerCase().contains(check.toLowerCase()) || WoY.toLowerCase().contains(check.toLowerCase()) ||
-                        Oname.toLowerCase().contains(check.toLowerCase())){
+                        Oname.toLowerCase().contains(check.toLowerCase()) || stree.toLowerCase().contains(check.toLowerCase())){
                     Log.d(TAG , " name here " + name);
-                    Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitutde, longitude);
+                    Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
+                            sorted, rot);
                     result.add(repo);
                     Log.d(TAG, " where8 " + result);
                 }
@@ -131,7 +171,8 @@ public class NetworkUtils {
                         String foodName = foodStuff.getString("name");
 
                         if (foodName.toLowerCase().contains(check.toLowerCase())) {
-                            Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitutde, longitude);
+                            Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
+                                    sorted, rot);
                             result.add(repo);
                             Log.d(TAG, " where9 " + result);
                             break;
@@ -144,7 +185,8 @@ public class NetworkUtils {
             }
 
             else {
-                Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitutde, longitude);
+                Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
+                        sorted, rot);
                 result.add(repo);
             }
 
@@ -152,26 +194,28 @@ public class NetworkUtils {
         }
 
         Log.d(TAG, " where6 " + result);
-        Collections.sort(result);
+
         return result;
     }
 
 
-    public static ArrayList<Vender> parseJSON(String json, Bundle check, double longitutde, double latitutde) throws JSONException {
+    public static ArrayList<Vender> parseJSON(String json, Bundle check, double longitutde, double latitude) throws JSONException {
         ArrayList<Vender> result = new ArrayList<>();
 
         JSONArray items = new JSONArray(json);
         Log.d(TAG , " oh ma " + json);
 
         Log.d(TAG , "is it huh? " + check);
-
+        String sorted = check.getString("sorted");
 
         for (int i = 0; i < items.length(); ++i) {
 
             JSONObject item = items.getJSONObject(i);
+            String rot = item.getString(API_LOCATION_ID);
             String Oname = item.getString("ownerName");
             String name = item.getString("cartName");
             String desc = item.getString("days");
+            String stree = item.getString("street");
             String WoH = item.getString("hours");
             String WoY = item.getString("currentlyInService");
             JSONArray foods = item.getJSONArray("foodList");
@@ -202,7 +246,16 @@ public class NetworkUtils {
                 }
             }
 
-            if(check.getString("theDay") != null && !(desc.toLowerCase().contains("daily"))) {
+            if(check.getString("street") != null) {
+                if (!(stree.toLowerCase().contains(check.getString("street").toLowerCase()))) {
+                    Log.d(TAG , " where0 " + stree + " address ");
+                    continue;
+                }
+            }
+
+            if(check.getString("theDay") != null && !(desc.toLowerCase().contains("daily")) &&
+                    !(desc.toLowerCase().contains("nightly"))
+                    ) {
                 if (!(desc.toLowerCase().contains(check.getString("theDay").toLowerCase()))){
                     Log.d(TAG , " where0 " + Oname + " day ");
                     continue;
@@ -263,7 +316,8 @@ public class NetworkUtils {
             }
 
 
-            Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitutde, longitutde);
+            Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitutde,
+                    sorted, rot);
             result.add(repo);
 
 
@@ -272,6 +326,22 @@ public class NetworkUtils {
 
 
         return result;
+
+    }
+
+
+    public static void parseJSONfor(String json, Vender change) throws JSONException {
+
+        JSONArray items = new JSONArray(json);
+        Log.d(TAG , " oh ma rev " + json);
+
+        for(int i = 0; i < items.length(); i++){
+            JSONObject item = items.getJSONObject(i);
+            int rate = Integer.parseInt(item.getString("rating"));
+
+            change.setRateMe(rate);
+
+        }
 
     }
 
