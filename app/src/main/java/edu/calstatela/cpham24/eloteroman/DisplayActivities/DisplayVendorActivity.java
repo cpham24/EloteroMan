@@ -56,7 +56,7 @@ public class DisplayVendorActivity extends AppCompatActivity {
 
     }
 
-
+    // comment
     private void getCartInfo(String myURL){
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myURL, null, new Response.Listener<JSONObject>() {
                     @Override
