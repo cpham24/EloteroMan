@@ -130,8 +130,6 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
 
                     mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name))
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name))
-
                     // enables interaction with the markers
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
