@@ -42,7 +42,7 @@ public class NetworkUtils {
         Uri uri;
 
         uri = Uri.parse(ELO_BASE_URL + getCarts).buildUpon()
-                    .build();
+                .build();
 
 
 
@@ -130,6 +130,7 @@ public class NetworkUtils {
             JSONObject item = items.getJSONObject(i);
             String rot = item.getString(API_LOCATION_ID);
             Log.d(TAG , " find the id: " + rot);
+            String picture = item.getString("picture");
             String Oname = item.getString("ownerName");
             String name = item.getString("cartName");
             String stree = item.getString("street");
@@ -158,7 +159,7 @@ public class NetworkUtils {
                         Oname.toLowerCase().contains(check.toLowerCase()) || stree.toLowerCase().contains(check.toLowerCase())){
                     Log.d(TAG , " name here " + name);
                     Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                            sorted, rot);
+                            sorted, rot, picture);
                     result.add(repo);
                     Log.d(TAG, " where8 " + result);
                 }
@@ -172,7 +173,7 @@ public class NetworkUtils {
 
                         if (foodName.toLowerCase().contains(check.toLowerCase())) {
                             Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                                    sorted, rot);
+                                    sorted, rot, picture);
                             result.add(repo);
                             Log.d(TAG, " where9 " + result);
                             break;
@@ -186,7 +187,7 @@ public class NetworkUtils {
 
             else {
                 Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                        sorted, rot);
+                        sorted, rot, picture);
                 result.add(repo);
             }
 
@@ -212,6 +213,7 @@ public class NetworkUtils {
 
             JSONObject item = items.getJSONObject(i);
             String rot = item.getString(API_LOCATION_ID);
+            String picture = item.getString("picture");
             String Oname = item.getString("ownerName");
             String name = item.getString("cartName");
             String desc = item.getString("days");
@@ -317,7 +319,7 @@ public class NetworkUtils {
 
 
             Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitutde,
-                    sorted, rot);
+                    sorted, rot, picture);
             result.add(repo);
 
 
