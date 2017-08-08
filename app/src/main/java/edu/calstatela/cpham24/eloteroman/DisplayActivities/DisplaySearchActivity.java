@@ -131,9 +131,6 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
         spinner.setOnItemSelectedListener(this);
 
 
-
-
-
         rv = (RecyclerView)findViewById(R.id.recyclerViewSearch);
 
 
@@ -217,6 +214,9 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
             Log.d(TAG, "Latitude:" + String.valueOf(location.getLatitude()) + "\n" +
                     "Longitude:" + String.valueOf(location.getLongitude()));
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
 
 
         }
@@ -395,9 +395,9 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
                     Log.d(TAG, " where21 " + result.get(i).getRateMe());
 
-
-
                 }
+
+
 
 
                 Collections.sort(result);
