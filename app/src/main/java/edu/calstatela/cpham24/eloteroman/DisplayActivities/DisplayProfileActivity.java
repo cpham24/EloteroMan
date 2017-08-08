@@ -169,10 +169,13 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     public void onLoadFinished(Loader<Void> loader,Void data) {
         Log.d("Comments", "_______________________onLoadFinished______________________");
         if(current_user!=null){
-            mProgress.setVisibility(View.INVISIBLE);
-            usernameTV.setText("Username: "+current_user.getUsername());
-            nameTV.setText("Name: "+current_user.getName());
-            isPublicTV.setText("Public: "+current_user.getIsPublic());
+            mProgress.setVisibility(View.GONE);
+            usernameTV.setText(current_user.getUsername());
+            nameTV.setText(current_user.getName());
+            if(current_user.getIsPublic().equals("true")||current_user.getIsPublic().equals("True"))
+                isPublicTV.setText("Account is public");
+            else
+                isPublicTV.setText("Account is not public");
             imageUrl=current_user.getAvatar();
             if(imageUrl != null) {
                 Picasso.with(context)

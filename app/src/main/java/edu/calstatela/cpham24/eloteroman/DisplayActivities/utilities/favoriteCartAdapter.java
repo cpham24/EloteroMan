@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.favoriteCart;
 import edu.calstatela.cpham24.eloteroman.R;
 
+
 /**
  * Created by Ambrosio on 8/6/2017.
  */
@@ -64,6 +65,7 @@ public class favoriteCartAdapter extends RecyclerView.Adapter<favoriteCartAdapte
         TextView time;
         TextView id;
         ImageView picture;
+        ImageView serviceImage;
         String cartId;
 
 
@@ -74,6 +76,7 @@ public class favoriteCartAdapter extends RecyclerView.Adapter<favoriteCartAdapte
             address =(TextView) itemView.findViewById(R.id.cart_address);
             time =(TextView) itemView.findViewById(R.id.cart_time);
             picture=(ImageView) itemView.findViewById(R.id.cart_image);
+            serviceImage=(ImageView) itemView.findViewById(R.id.cart_available);
 
             itemView.setOnClickListener(this);
         }
@@ -92,6 +95,10 @@ public class favoriteCartAdapter extends RecyclerView.Adapter<favoriteCartAdapte
                         .into(picture);
             }
 
+            if(cart.getIsInService().equals("true")||cart.getIsInService().equals("True")){
+                serviceImage.setVisibility(View.VISIBLE);
+            }
+            else serviceImage.setVisibility(View.INVISIBLE);
 
         }
 

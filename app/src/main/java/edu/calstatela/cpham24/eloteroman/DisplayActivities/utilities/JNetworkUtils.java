@@ -212,11 +212,12 @@ public class JNetworkUtils {
         String address = main.getString("street");
         String time = main.getString("hours");
         String url = main.getString("picture");
+        String inService = main.getString("currentlyInService");
 
 
 
 
-        result= new favoriteCart(id,name,address,time,url);
+        result= new favoriteCart(id,name,address,time,url,inService);
         Log.d("Comments", result.getId());
 
         return result;

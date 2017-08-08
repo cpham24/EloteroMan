@@ -1,48 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border">
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:background="@drawable/border"
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/cart_image"
-        android:layout_width="match_parent"
+        android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="6dp"/>
+        android:layout_marginTop="6dp" />
 
-    <TextView
-        android:id="@+id/cart_id"
+    <LinearLayout
+        android:layout_width="151dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0.48">
+
+        <TextView
+            android:id="@+id/cart_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textAlignment="center"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/cart_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/cart_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/cart_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:padding="8dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/cart_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:padding="8dp" />
-
-    <TextView
-        android:id="@+id/cart_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="8dp" />
-    <TextView
-        android:id="@+id/cart_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="8dp" />
-
-
+        <ImageView
+            android:id="@+id/cart_available"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="24dp"
+            app:srcCompat="@mipmap/ic_shopping_cart_black_24dp"
+            />
+    </LinearLayout>
 
 
 </LinearLayout>

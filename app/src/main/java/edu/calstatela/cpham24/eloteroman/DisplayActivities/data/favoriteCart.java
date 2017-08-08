@@ -10,15 +10,17 @@ public class favoriteCart {
     String address;
     String time;
     String url;
+    String isInService;
     double longitude;
     double latitude;
 
-    public favoriteCart(String id, String name, String address, String time, String url) {
+    public favoriteCart(String id, String name, String address, String time, String url,String isInService) {
         this.id=id;
         this.name = name;
         this.address = address;
         this.time = time;
         this.url=url;
+        this.isInService=isInService;
     }
 
     public String getId() {
@@ -55,6 +57,14 @@ public class favoriteCart {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getIsInService() {
+        return isInService;
+    }
+
+    public void setIsInService(String isInService) {
+        this.isInService = isInService;
     }
 
     public void setUrl(String url) {
