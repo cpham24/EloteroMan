@@ -173,6 +173,9 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                         }
                     }
                 });
+
+                // enables custom info window view
+                mMap.setInfoWindowAdapter(new EloteroInfoWindowAdapter(context, vendors));
             }
 
             @Override

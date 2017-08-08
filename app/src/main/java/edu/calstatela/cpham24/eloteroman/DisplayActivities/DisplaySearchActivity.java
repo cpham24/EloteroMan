@@ -22,9 +22,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,6 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.SearchPageUtils.AdvancedSearchFrag;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.SearchPageUtils.EloAdapt;
@@ -55,6 +58,8 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private double longitude;
     private double latitude;
+    Spinner spinner;
+    private ArrayList<Vender> forAll = new ArrayList<>();
 
 
 
@@ -111,11 +116,32 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
 
 
+        //Following the spinner tutorial
+        spinner = (Spinner) findViewById(R.id.choice_spinner);
+
+
+        ArrayAdapter<CharSequence> spindapter = ArrayAdapter.createFromResource(this,
+                R.array.sort_vend, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        spindapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(spindapter);
+
+        spinner.setOnItemSelectedListener(this);
+
+
+
+
 
         rv = (RecyclerView)findViewById(R.id.recyclerViewSearch);
 
 
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+        rv.addItemDecoration(new SimpleDividerItemDecoration(
+                getApplicationContext()
+        ));
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -216,10 +242,10 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
 
 
-    public void closeDialog(String ca, String ve, String fo, String le, String ri, String on, String tw, String dw) {
+    public void closeDialog(String ca, String ve, String st, String fo, String le, String ri, String on, String tw, String dw) {
         Log.d(TAG, " where2 " + ca);
 
-        load(ca, ve, fo, le, ri, on, tw, dw);
+        load(ca, ve, st, fo, le, ri, on, tw, dw);
 
 
     }
@@ -243,6 +269,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
         Bundle red = new Bundle();
         red.putString("shed", basic);
+        red.putString("sorted", spinner.getSelectedItem().toString());
         red.putString("find", null);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this,
@@ -262,17 +289,19 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
 
 
-    public void load(String ca, String ve, String fo, String le, String ri, String on, String tw, String dw) {
+    public void load(String ca, String ve, String st, String fo, String le, String ri, String on, String tw, String dw) {
         Log.d(TAG, " where3 " + ca);
         Bundle place = new Bundle();
         place.putString("cartName", ca);
         place.putString("ownerName", ve);
+        place.putString("street", st);
         place.putString("foodName", fo);
         place.putString("leftTime", le);
         place.putString("rightTime", ri);
         place.putString("leftDayTime", on);
         place.putString("rightDayTime", tw);
         place.putString("theDay", dw);
+        place.putString("sorted", spinner.getSelectedItem().toString());
 
 
         Log.d(TAG, " bunch ");
@@ -334,7 +363,8 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
                     else {
                         Log.d(TAG, " where7 " + args.getString("shed"));
-                        result = NetworkUtils.parseJSON(red, args.getString("shed"), longitude, latitude);
+                        result = NetworkUtils.parseJSON(red, args.getString("shed"),
+                                args.getString("sorted"), longitude, latitude);
                         Log.d(TAG, " where12 " + result);
                     }
 
@@ -346,8 +376,35 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
                 }
 
 
+                String green = null;
+                for (int i = 0; i < result.size(); ++i) {
+
+                    url = NetworkUtils.makeURLrev(result.get(i).getID());
+
+                    try{
+                        green = NetworkUtils.getResponseFromHttpUrl(url);
+                        Log.d("green" , "url: " + url.toString() + " oh " + args.getString("find"));
+
+                        NetworkUtils.parseJSONfor(green, result.get(i));
+
+
+                    }catch(Exception e){
+                        Log.d(TAG, " where20 " + e);
+                        e.printStackTrace();
+                    }
+
+                    Log.d(TAG, " where21 " + result.get(i).getRateMe());
+
+
+
+                }
+
+
+                Collections.sort(result);
+                Log.d(TAG, " get the spin: " + spinner.getSelectedItem().toString());
                 Log.d(TAG, " where5 " + result);
-                return result;
+                forAll = result;
+                return forAll;
             }
 
         };
@@ -361,16 +418,12 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
         progress.setVisibility(View.GONE);
         if(s == null){
-            EloAdapt adapter = new EloAdapt(s, new EloAdapt.ItemClickListener() {
-                @Override
-                public void onItemClick(int clickedItemIndex) {
-                    //click stuff
-                    //probably start activity to go to vendor page
-                }
-            });
-            rv.setAdapter(adapter);
 
+            Toast toast = Toast.makeText(this, " Sorry, no cart carries that ", Toast.LENGTH_LONG);
+            toast.show();
+        }
 
+        else if (s.size() == 0) {
             Toast toast = Toast.makeText(this, " Sorry, no cart carries that ", Toast.LENGTH_LONG);
             toast.show();
         }
@@ -398,6 +451,95 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
 
+        Log.d(TAG, " picked a choice  " + parent.getSelectedItem().toString());
+
+        if (parent.getSelectedItem().toString().equals("Weekends")) {
+            Log.d(TAG, " picked a choice  " + parent.getSelectedItem().toString() + " one ");
+
+            ArrayList<Vender> dayChoice = new ArrayList<>();
+
+            for (int k = 0; k < forAll.size(); ++k) {
+                if (forAll.get(k).getDesc().toLowerCase().contains("daily") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("weekends") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("saturday") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("sunday")
+                        ) {
+
+                    dayChoice.add(forAll.get(k));
+
+                }
+            }
+
+            for (int k = 0; k < dayChoice.size(); ++k) {
+                dayChoice.get(k).setSortBy("Distance");
+            }
+
+            Collections.sort(dayChoice);
+
+            EloAdapt adapter = new EloAdapt(dayChoice, new EloAdapt.ItemClickListener() {
+                @Override
+                public void onItemClick(int clickedItemIndex) {
+                    //click stuff
+                    //probably start activity to go to vendor page
+                }
+            });
+            rv.setAdapter(adapter);
+
+        }
+
+        else if (parent.getSelectedItem().toString().equals("Weekdays")) {
+            Log.d(TAG, " picked a choice  " + parent.getSelectedItem().toString() + " two ");
+
+            ArrayList<Vender> dayChoice = new ArrayList<>();
+
+            for (int k = 0; k < forAll.size(); ++k) {
+                if (forAll.get(k).getDesc().toLowerCase().contains("daily") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("weekdays") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("monday") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("tuesday") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("wednesday") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("thursday") ||
+                        forAll.get(k).getDesc().toLowerCase().contains("friday")
+                        ) {
+
+                    dayChoice.add(forAll.get(k));
+
+                }
+            }
+
+            for (int k = 0; k < dayChoice.size(); ++k) {
+                dayChoice.get(k).setSortBy("Distance");
+            }
+
+            Collections.sort(dayChoice);
+
+            EloAdapt adapter = new EloAdapt(dayChoice, new EloAdapt.ItemClickListener() {
+                @Override
+                public void onItemClick(int clickedItemIndex) {
+                    //click stuff
+                    //probably start activity to go to vendor page
+                }
+            });
+            rv.setAdapter(adapter);
+
+        }
+
+        else {
+            Log.d(TAG, " picked a choice  " + parent.getSelectedItem().toString() + " three ");
+            for (int k = 0; k < forAll.size(); ++k) {
+                forAll.get(k).setSortBy(parent.getSelectedItem().toString());
+            }
+
+            Collections.sort(forAll);
+            EloAdapt adapter = new EloAdapt(forAll, new EloAdapt.ItemClickListener() {
+                @Override
+                public void onItemClick(int clickedItemIndex) {
+                    //click stuff
+                    //probably start activity to go to vendor page
+                }
+            });
+            rv.setAdapter(adapter);
+        }
 
 
     }

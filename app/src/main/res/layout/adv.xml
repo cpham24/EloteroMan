@@ -23,6 +23,13 @@
         android:layout_height="0dip"
         android:layout_weight="0.15"/>
 
+    <EditText
+        android:id = "@+id/AddressSpot"
+        android:hint="Enter Street Address"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.15"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -75,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:text="Search"
-        android:layout_weight="0.22"/>
+        android:layout_weight="0.15"/>
 
 
 </LinearLayout>
