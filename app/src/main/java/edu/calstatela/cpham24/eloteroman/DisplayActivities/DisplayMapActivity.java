@@ -126,6 +126,9 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 for(int i=0; i<vendors.size(); i++) {
                     VendorItem v = vendors.get(i);
                     Log.d(TAG, "added a marker for " + v.cart_name);
+                    Log.d(TAG, "location: " + v.location.latitude + ", " + v.location.longitude);
+
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name))
 
                     mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name))
 
