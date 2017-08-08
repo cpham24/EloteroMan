@@ -81,6 +81,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     Log.d(TAG, "my current position is " + location.getLatitude() + ", " + location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, (float) 10.0));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000, null);
+                    mMap.getUiSettings().setMapToolbarEnabled(false);
                 }
             }
         });
@@ -128,48 +129,48 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     Log.d(TAG, "added a marker for " + v.cart_name);
                     Log.d(TAG, "location: " + v.location.latitude + ", " + v.location.longitude);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name))
-
-                    // enables interaction with the markers
-                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                        @Override
-                        public boolean onMarkerClick(Marker marker) {
-                            VendorItem vendor = null;
-
-                            for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
-                                LatLng pos = marker.getPosition();
-                                VendorItem v = vendors.get(i);
-                                if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
-                                    vendor = v;
-                            }
-
-                            if(vendor != null)
-                                Log.d(TAG, "user clicked on " + vendor.cart_name + " owned by " + vendor.owner_name);
-                            return false;
-                        }
-                    });
-
-                    // enables interaction with the info window
-                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                        @Override
-                        public void onInfoWindowClick(Marker marker) {
-                            VendorItem vendor = null;
-
-                            for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
-                                LatLng pos = marker.getPosition();
-                                VendorItem v = vendors.get(i);
-                                if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
-                                    vendor = v;
-                            }
-
-                            if(vendor != null) {
-                                Intent i = new Intent(context, DisplayVendorActivity.class);
-                                i.putExtra("vendor_id", vendor.id);
-                                startActivity(i);
-                            }
-                        }
-                    });
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name));
                 }
+
+                // enables interaction with the markers
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        VendorItem vendor = null;
+
+                        for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
+                            LatLng pos = marker.getPosition();
+                            VendorItem v = vendors.get(i);
+                            if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
+                                vendor = v;
+                        }
+
+                        if(vendor != null)
+                            Log.d(TAG, "user clicked on " + vendor.cart_name + " owned by " + vendor.owner_name);
+                        return false;
+                    }
+                });
+
+                // enables interaction with the info window
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        VendorItem vendor = null;
+
+                        for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
+                            LatLng pos = marker.getPosition();
+                            VendorItem v = vendors.get(i);
+                            if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
+                                vendor = v;
+                        }
+
+                        if(vendor != null) {
+                            Intent i = new Intent(context, DisplayVendorActivity.class);
+                            i.putExtra("vendor_id", vendor.id);
+                            startActivity(i);
+                        }
+                    }
+                });
             }
 
             @Override

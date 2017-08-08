@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".DisplayActivities.DisplayMapActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+
+    </android.support.design.widget.AppBarLayout>
+
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
