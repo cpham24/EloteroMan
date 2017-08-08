@@ -23,10 +23,11 @@ public class Vender implements Comparable {
     private String ID;
     private ArrayList<Integer> rateMe = new ArrayList<>();
     private String sortBy;
+    private String picture;
 
 
     public Vender(String na, String de, String wo, String ye, double lat, double lon, double userlat,
-                  double userlon, String id, String sort) {
+                  double userlon, String id, String sort, String pic) {
         this.name = na;
         this.desc = de;
         this.workHour = wo;
@@ -37,6 +38,7 @@ public class Vender implements Comparable {
         this.userlon = userlon;
         this.ID = id;
         this.sortBy = sort;
+        this.picture = pic;
     }
 
 
@@ -104,6 +106,17 @@ public class Vender implements Comparable {
         return rateMe;
     }
 
+    public int getAvgRate() {
+
+        int back = 0;
+
+        for (int i = 0; i < this.rateMe.size() ; ++i){
+            back += this.rateMe.get(i);
+        }
+
+        return back;
+    }
+
     public void setRateMe(int putMeIn) {
         this.rateMe.add(putMeIn);
     }
@@ -115,6 +128,14 @@ public class Vender implements Comparable {
 
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     //Code to determine distance with latitude and longitude points provided

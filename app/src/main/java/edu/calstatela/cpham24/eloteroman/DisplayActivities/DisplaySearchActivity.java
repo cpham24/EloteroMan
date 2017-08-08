@@ -131,9 +131,6 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
         spinner.setOnItemSelectedListener(this);
 
 
-
-
-
         rv = (RecyclerView)findViewById(R.id.recyclerViewSearch);
 
 
@@ -218,6 +215,9 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
             Log.d(TAG, "Latitude:" + String.valueOf(location.getLatitude()) + "\n" +
                     "Longitude:" + String.valueOf(location.getLongitude()));
 
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
 
         }
 
@@ -242,10 +242,11 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
 
 
-    public void closeDialog(String ca, String ve, String st, String fo, String le, String ri, String on, String tw, String dw) {
+    public void closeDialog(String ca, String ve, String st, String fo, String le, String ri,
+                            String on, String tw, String dw, String raMin, String raMax) {
         Log.d(TAG, " where2 " + ca);
 
-        load(ca, ve, st, fo, le, ri, on, tw, dw);
+        load(ca, ve, st, fo, le, ri, on, tw, dw, raMin, raMax);
 
 
     }
@@ -289,7 +290,8 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
 
 
-    public void load(String ca, String ve, String st, String fo, String le, String ri, String on, String tw, String dw) {
+    public void load(String ca, String ve, String st, String fo, String le, String ri, String on,
+                     String tw, String dw, String raMin, String raMax) {
         Log.d(TAG, " where3 " + ca);
         Bundle place = new Bundle();
         place.putString("cartName", ca);
@@ -302,6 +304,8 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
         place.putString("rightDayTime", tw);
         place.putString("theDay", dw);
         place.putString("sorted", spinner.getSelectedItem().toString());
+        place.putString("rate min", raMin);
+        place.putString("rate max", raMax);
 
 
         Log.d(TAG, " bunch ");
@@ -395,10 +399,11 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
                     Log.d(TAG, " where21 " + result.get(i).getRateMe());
 
-
-
                 }
 
+
+
+                rateLimit(result, args.getString("rate min"), args.getString("rate max"));
 
                 Collections.sort(result);
                 Log.d(TAG, " get the spin: " + spinner.getSelectedItem().toString());
@@ -408,6 +413,32 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
             }
 
         };
+    }
+
+    private void rateLimit(ArrayList<Vender> result, String raMin, String raMax) {
+
+        if (raMin != null && raMin.length() > 0 && !raMin.contains("null")) {
+            for (int i = 0; i < result.size(); ++i) {
+                if (result.get(i).getAvgRate() < Integer.parseInt(raMin)) {
+
+                    result.remove(i);
+                    --i;
+
+                }
+            }
+        }
+
+        if (raMax != null && raMax.length() > 0 && !raMax.contains("null")) {
+            for (int i = 0; i < result.size(); ++i) {
+                if (result.get(i).getAvgRate() < Integer.parseInt(raMax)) {
+
+                    result.remove(i);
+                    --i;
+
+                }
+            }
+        }
+
     }
 
 
