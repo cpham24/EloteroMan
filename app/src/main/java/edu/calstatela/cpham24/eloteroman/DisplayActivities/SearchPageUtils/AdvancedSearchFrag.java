@@ -43,7 +43,8 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
     }
 
     public interface OnDialogCloseListener {
-        void closeDialog(String ca, String ve, String st, String fo, String le, String ri, String on, String tw, String dw);
+        void closeDialog(String ca, String ve, String st, String fo, String le, String ri,
+                         String on, String tw, String dw, String raMin, String raMax);
     }
 
     @Override
@@ -133,10 +134,12 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
                 String on = curTimeOne.getSelectedItem().toString();
                 String tw = curTimeTwo.getSelectedItem().toString();
                 String dw = curTimeTwo.getSelectedItem().toString();
+                String raMin = minRate.getSelectedItem().toString();
+                String raMax = maxRate.getSelectedItem().toString();
 
                 Log.d(TAG, " where " + ca);
 
-                activity.closeDialog(ca, ve, st, fo, le, ri, on, tw, dw);
+                activity.closeDialog(ca, ve, st, fo, le, ri, on, tw, dw, raMin, raMax);
                 AdvancedSearchFrag.this.dismiss();
             }
         });

@@ -106,6 +106,17 @@ public class Vender implements Comparable {
         return rateMe;
     }
 
+    public int getAvgRate() {
+
+        int back = 0;
+
+        for (int i = 0; i < this.rateMe.size() ; ++i){
+            back += this.rateMe.get(i);
+        }
+
+        return back;
+    }
+
     public void setRateMe(int putMeIn) {
         this.rateMe.add(putMeIn);
     }
