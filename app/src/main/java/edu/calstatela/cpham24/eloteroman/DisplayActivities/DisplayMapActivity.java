@@ -2,6 +2,7 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -40,6 +41,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
     private static final int LOCATIONSLOADER = 69;
 
     private GoogleMap mMap;
+    private ArrayList<Marker> mMarkers;
     private FusedLocationProviderClient mFusedLocationClient;
     private Context context;
     private ArrayList<VendorItem> vendors;
@@ -122,10 +124,13 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             public void onLoadFinished(Loader<Void> loader, Void data) {
                 Log.d(TAG, "loaded data for " + vendors.size() + " vendors from network");
 
+                mMarkers = new ArrayList<Marker>();
+
                 for(int i=0; i<vendors.size(); i++) {
                     VendorItem v = vendors.get(i);
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name));
                     Log.d(TAG, "added a marker for " + v.cart_name);
+
+                    mMarkers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name)));
 
                     // enables interaction with the markers
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -143,6 +148,27 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                             if(vendor != null)
                                 Log.d(TAG, "user clicked on " + vendor.cart_name + " owned by " + vendor.owner_name);
                             return false;
+                        }
+                    });
+
+                    // enables interaction with the info window
+                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+                            VendorItem vendor = null;
+
+                            for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
+                                LatLng pos = marker.getPosition();
+                                VendorItem v = vendors.get(i);
+                                if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
+                                    vendor = v;
+                            }
+
+                            if(vendor != null) {
+                                Intent i = new Intent(context, DisplayVendorActivity.class);
+                                i.putExtra("vendor_id", vendor.id);
+                                startActivity(i);
+                            }
                         }
                     });
                 }
