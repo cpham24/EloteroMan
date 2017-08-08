@@ -64,7 +64,9 @@ public class DisplayVendorActivity extends AppCompatActivity {
                         try {
                             ownerName.setText(response.getString("ownerName"));
                             cartName.setText(response.getString("cartName"));
-                            Picasso.with(context).load(response.getString("picture")).into(cartImage);
+                            if(!response.getString("picture").equals("NA")){
+                                Picasso.with(context).load(response.getString("picture")).into(cartImage);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
