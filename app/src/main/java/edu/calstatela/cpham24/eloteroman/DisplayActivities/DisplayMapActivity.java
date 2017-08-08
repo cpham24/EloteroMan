@@ -41,7 +41,6 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
     private static final int LOCATIONSLOADER = 69;
 
     private GoogleMap mMap;
-    private ArrayList<Marker> mMarkers;
     private FusedLocationProviderClient mFusedLocationClient;
     private Context context;
     private ArrayList<VendorItem> vendors;
@@ -124,13 +123,9 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             public void onLoadFinished(Loader<Void> loader, Void data) {
                 Log.d(TAG, "loaded data for " + vendors.size() + " vendors from network");
 
-                mMarkers = new ArrayList<Marker>();
-
                 for(int i=0; i<vendors.size(); i++) {
                     VendorItem v = vendors.get(i);
                     Log.d(TAG, "added a marker for " + v.cart_name);
-
-                    mMarkers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name)));
 
                     // enables interaction with the markers
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
