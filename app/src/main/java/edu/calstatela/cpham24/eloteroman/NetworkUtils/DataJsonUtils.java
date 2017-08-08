@@ -76,19 +76,6 @@ public final class DataJsonUtils {
 
     public static ArrayList<LocationItem> parseLocationsFromJson(String locationJsonStr)
             throws JSONException {
-        /* Parameters of each location item */
-        final String API_LOCATION_ID                 = "_id";
-        final String API_LOCATION_CARTID             = "cartId";
-        final String API_LOCATION_STATIONARY         = "stationaryLocation";
-        final String API_LOCATION_STATIONARY_STREET  = "street";
-        final String API_LOCATION_STATIONARY_CITY    = "city";
-        final String API_LOCATION_STATIONARY_STATE   = "state";
-        final String API_LOCATION_STATIONARY_ZIP     = "zip";
-        final String API_LOCATION_CURRENT_MOBILE_LAT = "currentMobileLatitude";
-        final String API_LOCATION_CURRENT_MOBILE_LON = "currentMobileLongitude";
-        final String API_LOCATION_PREV_MOBILE_LAT    = "previousMobileLatitude";
-        final String API_LOCATION_PREV_MOBILE_LON    = "previousMobileLongitude";
-
         /* ArrayList to hold each location data */
         ArrayList<LocationItem> locationData = new ArrayList<LocationItem>();
 
@@ -106,14 +93,15 @@ public final class DataJsonUtils {
     public static ArrayList<VendorItem> parseVendorsFromJson(String vendorJsonStr)
             throws JSONException {
         /* Parameters of each location item */
-        final String API_VENDOR_ID          = "_id";
-        final String API_VENDOR_OWNER_NAME  = "ownerName";
-        final String API_VENDOR_CART_NAME   = "cartName";
-        final String API_VENDOR_DAYS        = "days";
-        final String API_VENDOR_HOURS       = "hours";
-        final String API_VENDOR_IN_SERVICE  = "currentlyInService";
-        final String API_VENDOR_LOCATION = "location";
-        final String API_VENDOR_FOOD_LIST   = "foodList";
+        final String API_VENDOR_ID         = "_id";
+        final String API_VENDOR_OWNER_NAME = "ownerName";
+        final String API_VENDOR_CART_NAME  = "cartName";
+        final String API_VENDOR_DAYS       = "days";
+        final String API_VENDOR_HOURS      = "hours";
+        final String API_VENDOR_IN_SERVICE = "currentlyInService";
+        final String API_VENDOR_IMG_URL    = "picture";
+        final String API_VENDOR_LOCATION   = "location";
+        final String API_VENDOR_FOOD_LIST  = "foodList";
 
         /* ArrayList to hold each vendor data */
         ArrayList<VendorItem> vendorData = new ArrayList<VendorItem>();
@@ -129,6 +117,7 @@ public final class DataJsonUtils {
             String hours = vendor.getString(API_VENDOR_HOURS);
             String days = vendor.getString(API_VENDOR_DAYS);
             boolean in_service = vendor.getBoolean(API_VENDOR_IN_SERVICE);
+            String img_url = vendor.getString(API_VENDOR_IMG_URL);
             VendorLocationItem location = parseVendorLocationFromJson(vendor.getJSONObject(API_VENDOR_LOCATION));
             JSONArray food_list_json = vendor.getJSONArray(API_VENDOR_FOOD_LIST);
             ArrayList<FoodItem> food_list = new ArrayList<FoodItem>();
@@ -138,7 +127,7 @@ public final class DataJsonUtils {
                 food_list.add(parseFoodFromJson(food));
             }
 
-            vendorData.add(new VendorItem(id, owner_name, cart_name, hours, days, in_service, location, food_list));
+            vendorData.add(new VendorItem(id, owner_name, cart_name, hours, days, in_service, img_url, location, food_list));
         }
 
         return vendorData;

@@ -13,6 +13,7 @@ public class VendorItem {
     public String days;
     public String hours;
     public boolean in_service;
+    public String img_url;
     public VendorLocationItem location;
     public ArrayList<FoodItem> food_list;
     public String marker_id;
@@ -21,13 +22,14 @@ public class VendorItem {
         // empty constructor
     }
 
-    public VendorItem(String id, String owner_name, String cart_name, String days, String hours, boolean in_service, VendorLocationItem location, ArrayList<FoodItem> food_list) {
+    public VendorItem(String id, String owner_name, String cart_name, String days, String hours, boolean in_service, String img_url, VendorLocationItem location, ArrayList<FoodItem> food_list) {
         this.id = id;
         this.owner_name = owner_name;
         this.cart_name = cart_name;
         this.days = days;
         this.hours = hours;
         this.in_service = in_service;
+        this.img_url = img_url;
         this.location = location;
         this.food_list = food_list;
     }

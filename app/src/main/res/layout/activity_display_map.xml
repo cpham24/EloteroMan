@@ -8,17 +8,13 @@
     tools:context=".DisplayActivities.DisplayMapActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/floating_search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:background="#ffffff">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Search bar will go here"/>
+        <include layout="@layout/floating_search_bar"/>
 
     </android.support.design.widget.AppBarLayout>
 

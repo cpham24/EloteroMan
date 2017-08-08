@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +16,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -20,6 +25,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -52,6 +59,16 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
         setContentView(R.layout.activity_display_map);
 
         context = this;
+
+        // enables interaction
+        View v = findViewById(R.id.floating_search_bar);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, DisplaySearchActivity.class);
+                startActivity(i);
+            }
+        });
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
@@ -126,12 +143,22 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             public void onLoadFinished(Loader<Void> loader, Void data) {
                 Log.d(TAG, "loaded data for " + vendors.size() + " vendors from network");
 
+                // the following code sets a custom marker to be displayed instead of the default marker
+                Display d = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                d.getSize(size);
+                int width = size.x;
+                int height = size.y;
+
+                Bitmap original = BitmapFactory.decodeResource(context.getResources(), R.drawable.cart_icon);
+                Bitmap scaled = Bitmap.createScaledBitmap(original, width/10, width/10, true);
+
                 for(int i=0; i<vendors.size(); i++) {
                     VendorItem v = vendors.get(i);
                     Log.d(TAG, "added a marker for " + v.cart_name);
                     Log.d(TAG, "location: " + v.location.latitude + ", " + v.location.longitude);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name).icon(BitmapDescriptorFactory.fromBitmap(scaled)));
                 }
 
                 // enables interaction with the markers
