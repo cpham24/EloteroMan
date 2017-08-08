@@ -101,9 +101,15 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
 
             Log.d(TAG , " hmm");
 
-            if(thuUrl != null){
+            if(thuUrl != null && thuUrl.length() > 8){
                 Picasso.with(context)
                         .load(thuUrl)
+                        .into(thu);
+            }
+
+            else {
+                Picasso.with(context)
+                        .load("http://www.pixempire.com/images/preview/work-completed-icon.jpg")
                         .into(thu);
             }
 
