@@ -128,7 +128,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     Log.d(TAG, "added a marker for " + v.cart_name);
                     Log.d(TAG, "location: " + v.location.latitude + ", " + v.location.longitude);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name))
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name));
 
                     // enables interaction with the markers
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
