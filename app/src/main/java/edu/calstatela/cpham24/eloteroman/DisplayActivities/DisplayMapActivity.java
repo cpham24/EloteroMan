@@ -1,7 +1,13 @@
 package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +16,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -33,6 +40,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -48,6 +57,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
     private static final float DEFAULT_ZOOM = (float) 16.5; // shows the neighborhood
     private static final int LOCATIONSLOADER = 69;
 
+    private String username;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private Context context;
@@ -58,6 +68,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_map);
 
+        username = getIntent().getExtras().getString("username");
         context = this;
 
         // enables interaction
@@ -71,6 +82,14 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
         });
 
         findViewById(R.id.appbar).bringToFront();
+        findViewById(R.id.profile_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, DisplayProfileActivity.class);
+                i.putExtra("username", username);
+                startActivity(i);
+            }
+        });
         findViewById(R.id.locator_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +224,50 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                             i.putExtra("vendor_id", vendor.id);
                             startActivity(i);
                         }
+                    }
+                });
+
+                mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+                    @Override
+                    public void onInfoWindowLongClick(Marker marker) {
+                        VendorItem vendor = null;
+
+                        for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
+                            LatLng pos = marker.getPosition();
+                            VendorItem v = vendors.get(i);
+                            if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
+                                vendor = v;
+                        }
+
+                        MapDialogFragment df = new MapDialogFragment();
+                        Bundle args = new Bundle();
+                        args.putString("id", vendor.id);
+                        args.putString("cart_name", vendor.cart_name);
+                        args.putString("owner_name", vendor.owner_name);
+                        df.setArguments(args);
+
+                        df.setCallback(new MapDialogFragment.MapDialogCallback() {
+                            @Override
+                            public void OnMoreInfoClick(String id) {
+                                Intent i = new Intent(context, DisplayVendorActivity.class);
+                                i.putExtra("vendor_id", id);
+                                startActivity(i);
+                            }
+
+                            @Override
+                            public void OnDirectionsClick(String id) {
+                                // todo: send lat long to built-in Maps
+                                Log.d(TAG, "user chose to view directions");
+                            }
+
+                            @Override
+                            public void OnBackClick(String id) {
+                                // do nothing
+                                Log.d(TAG, "user chose to cancel");
+                            }
+                        });
+
+                        df.show(getFragmentManager(), "vendor");
                     }
                 });
 

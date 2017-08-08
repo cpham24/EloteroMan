@@ -52,6 +52,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     ArrayList<favoriteCart> cartList=new ArrayList<favoriteCart>();
     ArrayList<String> ids;
     String imageUrl;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +70,8 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
         foodCartsTV =(TextView) findViewById(R.id.favoriteFoodCartsView);
         pictureIV =(ImageView) findViewById(R.id.avatarView);
 
-
         userPrefs = getSharedPreferences(USER_PREFS, 0);
-
+        username = getIntent().getExtras().getString("username");
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 
