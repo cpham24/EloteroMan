@@ -54,8 +54,14 @@ public final class DataJsonUtils {
 
         String type = vendor_location.getString(API_VENDOR_LOCATION_TYPE);
         JSONArray coordinates = vendor_location.getJSONArray(API_VENDOR_LOCATION_COORDINATES);
-        double latitude = coordinates.getDouble(1);
-        double longitude = coordinates.getDouble(0);
+
+        // handles empty coordinates now
+        double latitude = 0.0;
+        if(coordinates.get(1) != JSONObject.NULL)
+            latitude = coordinates.getDouble(1);
+        double longitude = 0.0;
+        if(coordinates.get(0) != JSONObject.NULL)
+            longitude = coordinates.getDouble(0);
 
         return new VendorLocationItem(type, latitude, longitude);
     }
