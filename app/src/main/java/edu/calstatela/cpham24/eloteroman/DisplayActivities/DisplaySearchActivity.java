@@ -139,6 +139,10 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        rv.addItemDecoration(new SimpleDividerItemDecoration(
+                getApplicationContext()
+        ));
+
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
