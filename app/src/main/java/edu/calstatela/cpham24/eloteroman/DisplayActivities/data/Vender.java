@@ -2,6 +2,8 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities.data;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -18,9 +20,13 @@ public class Vender implements Comparable {
     private double lon;
     private double userlat;
     private double userlon;
+    private String ID;
+    private ArrayList<Integer> rateMe = new ArrayList<>();
+    private String sortBy;
 
 
-    public Vender(String na, String de, String wo, String ye, double lat, double lon, double userlat, double userlon) {
+    public Vender(String na, String de, String wo, String ye, double lat, double lon, double userlat,
+                  double userlon, String id, String sort) {
         this.name = na;
         this.desc = de;
         this.workHour = wo;
@@ -29,6 +35,8 @@ public class Vender implements Comparable {
         this.lon = lon;
         this.userlat = userlat;
         this.userlon = userlon;
+        this.ID = id;
+        this.sortBy = sort;
     }
 
 
@@ -84,12 +92,117 @@ public class Vender implements Comparable {
         this.userlon = userlon;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public ArrayList<Integer> getRateMe() {
+        return rateMe;
+    }
+
+    public void setRateMe(int putMeIn) {
+        this.rateMe.add(putMeIn);
+    }
+
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
     //Code to determine distance with latitude and longitude points provided
     //by this site, for convenience
     //http://www.geodatasource.com/developers/java
     @Override
     public int compareTo(Object o) {
 
+        if (this.getSortBy().equals("Alphabetical (A-Z)")) {
+            return this.getName().compareTo(((Vender)o).getName());
+        }
+
+        else if (this.getSortBy().equals("Alphabetical (Z-A)")) {
+            return ((Vender)o).getName().compareTo(this.getName());
+        }
+
+        else if (this.getSortBy().equals("High Ratings")) {
+            return ratingCalc(o);
+
+        }
+
+        else if (this.getSortBy().equals("Low Ratings")) {
+            return -(ratingCalc(o));
+        }
+
+
+        else {
+            //Sort by distance
+            return distanceCalc(o);
+        }
+
+
+    }
+
+    private int ratingCalc(Object o) {
+
+        ArrayList<Integer> one = this.getRateMe();
+        ArrayList<Integer> two = ((Vender)o).getRateMe();
+
+
+        int divideAvgFirst = one.size();
+        int divideAvgSecond = two.size();
+
+
+        if (divideAvgFirst == 0 && divideAvgSecond == 0) {
+            return 0;
+        }
+
+        else if (divideAvgFirst == 0) {
+            return -1;
+        }
+
+        else if(divideAvgSecond == 0) {
+            return 1;
+        }
+
+
+        int first = 0;
+        int second = 0;
+
+        for (int i = 0; i < one.size(); ++i) {
+            first += one.get(i);
+        }
+
+        for (int i = 0; i < two.size(); ++i) {
+            second += two.get(i);
+        }
+
+
+        first = first/divideAvgFirst;
+        second = second/divideAvgSecond;
+
+        if (first > second) {
+            return 1;
+        }
+
+        else if (first < second) {
+            return -1;
+        }
+
+        else {
+            return 0;
+        }
+
+
+    }
+
+    private int distanceCalc(Object o) {
         double theta = this.getUserlon() - this.getLon();
         double dist = Math.sin(deg2rad(this.getUserlat())) * Math.sin(deg2rad(this.getLat())) +
                 Math.cos(deg2rad(this.getUserlat())) * Math.cos(deg2rad(this.getLat())) * Math.cos(deg2rad(theta));
@@ -118,8 +231,6 @@ public class Vender implements Comparable {
         else {
             return 0;
         }
-
-
 
     }
 

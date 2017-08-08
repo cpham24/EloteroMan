@@ -24,6 +24,7 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
 
     private EditText cart;
     private EditText vend;
+    private EditText street;
     private EditText food;
     private Spinner leftTime;
     private Spinner rightTime;
@@ -37,7 +38,7 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
     }
 
     public interface OnDialogCloseListener {
-        void closeDialog(String ca, String ve, String fo, String le, String ri, String on, String tw, String dw);
+        void closeDialog(String ca, String ve, String st, String fo, String le, String ri, String on, String tw, String dw);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
         View view = inflater.inflate(R.layout.adv, container, false);
         cart = (EditText) view.findViewById(R.id.whichCartName);
         vend = (EditText) view.findViewById(R.id.whichVendName);
+        street = (EditText) view.findViewById(R.id.AddressSpot);
         food = (EditText) view.findViewById(R.id.whichFood);
 
         searchEm = (Button) view.findViewById(R.id.advFindEm);
@@ -99,6 +101,7 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
 
                 String ca = cart.getText().toString();
                 String ve = vend.getText().toString();
+                String st = street.getText().toString();
                 String fo = food.getText().toString();
 
                 String le = leftTime.getSelectedItem().toString();
@@ -109,7 +112,7 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
 
                 Log.d(TAG, " where " + ca);
 
-                activity.closeDialog(ca, ve, fo, le, ri, on, tw, dw);
+                activity.closeDialog(ca, ve, st, fo, le, ri, on, tw, dw);
                 AdvancedSearchFrag.this.dismiss();
             }
         });
