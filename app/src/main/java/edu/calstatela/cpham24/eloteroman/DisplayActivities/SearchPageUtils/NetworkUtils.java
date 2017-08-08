@@ -146,10 +146,29 @@ public class NetworkUtils {
 
             for (int g = 0; g < there.length; ++g) {
                 there[g] = fair.getString(g);
+                Log.d(TAG, " let see " + there[g]);
             }
 
-            double lat = Double.parseDouble(there[0]);
-            double lon = Double.parseDouble(there[1]);
+            double lat = 0.0;
+            double lon = 0.0;
+
+            if (there[0] != null && there[0].length() > 0 && !there[0].contains("null")) {
+                Log.d(TAG, " you aint trying " + there[0] + there[0].length());
+                lat = Double.parseDouble(there[0]);
+            }
+
+            else {
+                continue;
+            }
+
+            if (there[1] != null && there[1].length() > 0 && !there[1].contains("null")) {
+                lon = Double.parseDouble(there[1]);
+            }
+
+            else {
+                continue;
+            }
+
             Log.d(TAG , " come " + Oname + " + " + check);
 
             if (check != null) {
@@ -231,8 +250,26 @@ public class NetworkUtils {
                 there[g] = fair.getString(g);
             }
 
-            double lat = Double.parseDouble(there[0]);
-            double lon = Double.parseDouble(there[1]);
+            double lat = 0;
+            double lon = 0;
+
+            if (there[0] != null && there[0].length() > 0 && !there[0].contains("null")) {
+                lat = Double.parseDouble(there[0]);
+            }
+
+            else {
+                continue;
+            }
+
+            if (there[1] != null && there[1].length() > 0 && !there[1].contains("null")) {
+                lon = Double.parseDouble(there[1]);
+            }
+
+            else {
+                continue;
+            }
+
+
 
             if(check.getString("ownerName") != null) {
                 if (!(Oname.toLowerCase().contains(check.getString("ownerName").toLowerCase()))) {

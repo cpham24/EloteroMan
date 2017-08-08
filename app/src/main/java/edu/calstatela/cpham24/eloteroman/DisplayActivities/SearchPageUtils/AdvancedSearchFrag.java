@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import edu.calstatela.cpham24.eloteroman.R;
 
@@ -31,6 +32,10 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
     private Spinner curTimeOne;
     private Spinner curTimeTwo;
     private Spinner theDay;
+    private TextView min;
+    private TextView max;
+    private Spinner minRate;
+    private Spinner maxRate;
     private Button searchEm;
 
     public AdvancedSearchFrag() {
@@ -50,6 +55,9 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
         vend = (EditText) view.findViewById(R.id.whichVendName);
         street = (EditText) view.findViewById(R.id.AddressSpot);
         food = (EditText) view.findViewById(R.id.whichFood);
+
+        min = (TextView) view.findViewById(R.id.minText);
+        max = (TextView) view.findViewById(R.id.maxText);
 
         searchEm = (Button) view.findViewById(R.id.advFindEm);
 
@@ -86,13 +94,29 @@ public class AdvancedSearchFrag extends DialogFragment implements AdapterView.On
         curTimeTwo.setAdapter(spindapterThree);
         curTimeTwo.setOnItemSelectedListener(this);
 
+        //choose days
         theDay = (Spinner) view.findViewById(R.id.dayWork);
         ArrayAdapter<CharSequence> spindapterFour = ArrayAdapter.createFromResource(view.getContext(),
                 R.array.theDayMan, android.R.layout.simple_spinner_item);
-        spindapterThree.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spindapterFour.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         theDay.setAdapter(spindapterFour);
         theDay.setOnItemSelectedListener(this);
 
+        //min
+        minRate = (Spinner) view.findViewById(R.id.minRate);
+        ArrayAdapter<CharSequence> spindapterFive = ArrayAdapter.createFromResource(view.getContext(),
+                R.array.rateNum, android.R.layout.simple_spinner_item);
+        spindapterFive.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        minRate.setAdapter(spindapterFive);
+        minRate.setOnItemSelectedListener(this);
+
+        //max
+        maxRate = (Spinner) view.findViewById(R.id.maxRate);
+        ArrayAdapter<CharSequence> spindapterSix = ArrayAdapter.createFromResource(view.getContext(),
+                R.array.rateNum, android.R.layout.simple_spinner_item);
+        spindapterSix.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        maxRate.setAdapter(spindapterSix);
+        maxRate.setOnItemSelectedListener(this);
 
         searchEm.setOnClickListener(new View.OnClickListener() {
             @Override

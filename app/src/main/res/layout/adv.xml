@@ -4,8 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:weightSum="1">
+    android:padding="30dp"
+    android:weightSum="2">
 
 
 
@@ -34,32 +34,42 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
-        android:layout_weight="0.5"
+        android:layout_weight="0.3"
         android:weightSum="1">
 
         <Spinner
             android:id="@+id/leftT"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"/>
 
         <Spinner
             android:id="@+id/APMO"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:orientation="horizontal"
+        android:layout_weight="0.3"
+        android:weightSum="1">
 
         <Spinner
             android:id="@+id/rightT"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"/>
 
         <Spinner
             android:id="@+id/APMT"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"/>
 
     </LinearLayout>
 
@@ -75,7 +85,55 @@
         android:hint="Enter food item"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.18"/>
+        android:layout_weight="0.15"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/minText"
+            android:text="Min Rating"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+
+        <Spinner
+            android:id="@+id/minRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+        </Spinner>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/maxText"
+            android:text="Max Rating"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+
+        <Spinner
+            android:id="@+id/maxRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+        </Spinner>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/advFindEm"
