@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -82,6 +83,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, (float) 10.0));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000, null);
                     mMap.getUiSettings().setMapToolbarEnabled(false);
+                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 }
             }
         });
