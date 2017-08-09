@@ -3,11 +3,20 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/quick_search_text"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Tap here to Search"
+        android:hint="Enter a search term"
+        android:maxLines="1"
         android:textSize="16dp"/>
+
+    <ImageView
+        android:id="@+id/quick_search_button"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/search_icon"/>
 
 </LinearLayout>

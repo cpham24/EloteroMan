@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -74,12 +75,12 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
         username = getIntent().getExtras().getString("username");
         context = this;
 
-        // enables interaction
-        View v = findViewById(R.id.floating_search_bar);
-        v.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.quick_search_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String query = ((TextView)findViewById(R.id.quick_search_text)).getText().toString();
                 Intent i = new Intent(context, DisplaySearchActivity.class);
+                i.putExtra("query", query);
                 startActivity(i);
             }
         });
@@ -110,8 +111,8 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 mMap = googleMap;
                 mMap.getUiSettings().setMapToolbarEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setCompassEnabled(false);
                 getCurrentLocation();
-                loadData();
             }
         });
     }
@@ -130,6 +131,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "my current position is " + location.getLatitude() + ", " + location.getLongitude());
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, DEFAULT_ZOOM), 1000, null);
+                    loadData();
                 }
             }
         });
