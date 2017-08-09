@@ -54,8 +54,12 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     ArrayList<favoriteCart> cartList=new ArrayList<favoriteCart>();
     ArrayList<String> ids;
     String imageUrl;
+<<<<<<< HEAD
     ImageButton logoutBtn;
     Button editBtn;
+=======
+    String username;
+>>>>>>> master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +79,8 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
         logoutBtn   = (ImageButton) findViewById(R.id.logout_btn);
         editBtn = (Button) findViewById(R.id.edit_user_btn);
 
-
         userPrefs = getSharedPreferences(USER_PREFS, 0);
-
+        username = getIntent().getExtras().getString("username");
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 
@@ -211,7 +214,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
             if(cartList!=null) {
                 mcartAdapter = new favoriteCartAdapter(cartList, new favoriteCartAdapter.ItemClickListener() {
                     @Override
-                    public void onItemClick(int clickedItemIndex,String cartId) {
+                    public void onItemClick(int clickedItemIndex, String cartId) {
 
                         Log.d(TAG, String.format("id: %s", cartId));
                         Toast.makeText(context, "id: "+cartId, Toast.LENGTH_SHORT).show();

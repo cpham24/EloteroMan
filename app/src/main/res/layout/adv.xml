@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    android:weightSum="2">
+
+
+
+    <EditText
+        android:id = "@+id/whichCartName"
+        android:hint="Enter Cart name"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.15"/>
+
+    <EditText
+        android:id = "@+id/whichVendName"
+        android:hint="Enter Vender name"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.15"/>
+
+    <EditText
+        android:id = "@+id/AddressSpot"
+        android:hint="Enter Street Address"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.15"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:orientation="horizontal"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <Spinner
+            android:id="@+id/leftT"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.45"/>
+
+        <Spinner
+            android:id="@+id/APMO"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.55"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:orientation="horizontal"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <Spinner
+            android:id="@+id/rightT"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.45"/>
+
+        <Spinner
+            android:id="@+id/APMT"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.55"/>
+
+    </LinearLayout>
+
+
+    <Spinner
+        android:id="@+id/dayWork"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.1"/>
+
+    <EditText
+        android:id = "@+id/whichFood"
+        android:hint="Enter food item"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.15"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/minText"
+            android:text="Min Rating"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+
+        <Spinner
+            android:id="@+id/minRate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+        </Spinner>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/maxText"
+            android:text="Max Rating"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+
+        <Spinner
+            android:id="@+id/maxRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+        </Spinner>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/advFindEm"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:text="Search"
+        android:layout_weight="0.15"/>
+
+
+</LinearLayout>

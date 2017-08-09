@@ -4,8 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     tools:context="edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayLoginActivity">
 
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/burger"
+        />
 
     <TextView
         android:id="@+id/textView"
@@ -13,20 +20,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingTop="60dp"
         android:textSize="32dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
         android:text="@string/app_name" />
 
     <EditText
         android:id="@+id/usernameET"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="60dp"
+        android:layout_margin="24dp"
         android:ems="10"
         android:layout_gravity="center"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:hint="username"
+        android:hint="Please enter your full name"
+        android:textSize="20dp"
         android:focusable = "true"/>
 
     <Button
@@ -34,5 +43,8 @@
         android:layout_width="120dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="Login" />
+        android:text="Login"
+        android:textSize="20dp"/>
+
+    <requestFocus/>
 </LinearLayout>

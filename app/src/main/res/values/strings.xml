@@ -4,5 +4,67 @@
     <string name="display_profile_name">Profile Page</string>
     <string name="display_map_name">Map Page</string>
     <string name="display_vendor_name">Vendor Page</string>
-    <string name="display_settings_name">Settings Page</string>
+    <string name="display_search_name">Search Page</string>
+
+
+
+    <string-array name="sort_vend">
+        <item>Distance</item>
+        <item>Alphabetical (A-Z)</item>
+        <item>Alphabetical (Z-A)</item>
+        <item>Weekends</item>
+        <item>Weekdays</item>
+        <item>High Ratings</item>
+        <item>Low Ratings</item>
+    </string-array>
+
+    <string-array name="numberTime">
+        <item></item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="timeOfDay">
+        <item></item>
+        <item>AM</item>
+        <item>PM</item>
+    </string-array>
+
+    <string-array name="theDayMan">
+        <item></item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+
+    </string-array>
+
+    <string-array name="rateNum">
+        <item></item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
 </resources>

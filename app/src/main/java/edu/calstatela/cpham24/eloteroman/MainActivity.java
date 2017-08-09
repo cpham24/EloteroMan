@@ -2,73 +2,56 @@ package edu.calstatela.cpham24.eloteroman;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayLoginActivity;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayMapActivity;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayProfileActivity;
-import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplaySettingsActivity;
+import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplaySearchActivity;
 import edu.calstatela.cpham24.eloteroman.DisplayActivities.DisplayVendorActivity;
+import edu.calstatela.cpham24.eloteroman.DisplayActivities.data.user;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final String TAG="loginActivity";
+    Button loginBtn;
+    EditText usernameET;
+    String username;
+    Bundle bundleForLoader;
+    user current_user;
+    private SharedPreferences userPrefs;
+    String USER_PREFS="user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_display_login);
 
-        // we don't need to store a reference of these in the main class
-        Button loginBtn    = (Button) findViewById(R.id.loginBtn);
-        Button profileBtn  = (Button) findViewById(R.id.profileBtn);
-        Button mapBtn      = (Button) findViewById(R.id.mapBtn);
-        Button vendorBtn   = (Button) findViewById(R.id.vendorBtn);
-        Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
+        loginBtn=(Button)findViewById(R.id.login_button);
+        usernameET=(EditText)findViewById(R.id.usernameET);
+        final Context context = this;
 
-        // get a reference to the main context
-        final Context main = this;
-
-        // the following code set click listeners to each of the buttons
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        loginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(main, DisplayLoginActivity.class);
-                startActivity(i);
+            public void onClick(View view) {
+                username=usernameET.getText().toString();
+                if(username.length()>1) {
+                    Intent i = new Intent(context, DisplayMapActivity.class);
+                    i.putExtra("username", username);
+                    startActivity(i);
+                }
+                else
+                    Toast.makeText(context, "Your name is blank",Toast.LENGTH_SHORT).show();
             }
         });
 
-        profileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(main, DisplayProfileActivity.class);
-                startActivity(i);
-            }
-        });
-
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(main, DisplayMapActivity.class);
-                startActivity(i);
-            }
-        });
-
-        vendorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(main, DisplayVendorActivity.class);
-                startActivity(i);
-            }
-        });
-
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(main, DisplaySettingsActivity.class);
-                startActivity(i);
-            }
-        });
+        usernameET.clearFocus();
     }
 }
