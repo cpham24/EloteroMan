@@ -67,8 +67,7 @@ public class NetworkUtils {
     public static URL makeURLrev(String cart){
         Uri uri;
 
-        uri = Uri.parse(ELO_BASE_URL + getReviews).buildUpon()
-                .appendQueryParameter(PARAM_REV, cart)
+        uri = Uri.parse(ELO_BASE_URL + getCarts).buildUpon()
                 .build();
 
 
@@ -139,6 +138,7 @@ public class NetworkUtils {
             String WoH = item.getString("hours");
             String WoY = item.getString("currentlyInService");
             JSONArray foods = item.getJSONArray("foodList");
+            JSONArray revs = item.getJSONArray("reviewList");
             JSONObject loc = item.getJSONObject("location");
             JSONArray fair = loc.getJSONArray("coordinates");
             String[] there = new String[2];
@@ -209,6 +209,12 @@ public class NetworkUtils {
                 Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
                         sorted, rot, picture, stree, cit);
                 result.add(repo);
+
+                for (int k = 0; k < revs.length(); ++k) {
+                    JSONObject r = revs.getJSONObject(k);
+                    double rate = Double.parseDouble(r.getString("rating"));
+                    repo.setRateMe(rate);
+                }
             }
 
             Log.d(TAG, " where11 " + result + " lllo ");
@@ -242,6 +248,7 @@ public class NetworkUtils {
             String WoH = item.getString("hours");
             String WoY = item.getString("currentlyInService");
             JSONArray foods = item.getJSONArray("foodList");
+            JSONArray revs = item.getJSONArray("reviewList");
             JSONObject loc = item.getJSONObject("location");
             JSONArray fair = loc.getJSONArray("coordinates");
             String[] there = new String[2];
@@ -325,10 +332,17 @@ public class NetworkUtils {
 
             }
 
-            if(check.getString("leftTime") != null && check.getString("rightTime") != null &&
-                    check.getString("leftDayTime") != null && check.getString("rightDayTime") != null) {
-                if (!(WoH.substring(0,5).toLowerCase().contains(check.getString("leftTime").toLowerCase() + check.getString("leftDayTime"))) &&
-                        !(WoH.substring(4,WoH.length() - 1).toLowerCase().contains(check.getString("rightTime").toLowerCase() + check.getString("rightDayTime")))) {
+            if(check.getString("leftTime") != null && check.getString("leftDayTime") != null) {
+                if (!(WoH.substring(0,5).toLowerCase().contains(check.getString("leftTime").toLowerCase() +
+                        check.getString("leftDayTime")))) {
+                    Log.d(TAG , " where0 " + Oname + " time ");
+                    continue;
+                }
+            }
+
+            if(check.getString("rightTime") != null && check.getString("rightDayTime") != null) {
+                if (!(WoH.substring(4,WoH.length() - 1).toLowerCase().contains(check.getString("rightTime").toLowerCase() +
+                        check.getString("rightDayTime")))) {
                     Log.d(TAG , " where0 " + Oname + " time ");
                     continue;
                 }
@@ -361,6 +375,12 @@ public class NetworkUtils {
                     sorted, rot, picture, stree, cit);
             result.add(repo);
 
+            for (int k = 0; k < revs.length(); ++k) {
+                JSONObject r = revs.getJSONObject(k);
+                double rate = Double.parseDouble(r.getString("rating"));
+                repo.setRateMe(rate);
+            }
+
 
         }
 
@@ -378,9 +398,15 @@ public class NetworkUtils {
 
         for(int i = 0; i < items.length(); i++){
             JSONObject item = items.getJSONObject(i);
-            int rate = Integer.parseInt(item.getString("rating"));
+            JSONArray revs = item.getJSONArray("reviewList");
 
-            change.setRateMe(rate);
+            for (int k = 0; k < revs.length(); ++k) {
+                JSONObject r = revs.getJSONObject(k);
+                double rate = Double.parseDouble(r.getString("rating"));
+                change.setRateMe(rate);
+            }
+
+
 
         }
 
