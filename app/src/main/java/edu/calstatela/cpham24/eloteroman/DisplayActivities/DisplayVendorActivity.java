@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -47,9 +48,22 @@ public class DisplayVendorActivity extends AppCompatActivity {
     private TextView workingNow;
     private ImageView cartImage;
     private RatingBar ratingBar;
+    private RatingBar leaveARatingBar;
     private TextView ratingCount;
     private String getOneCartURL = "http://162.243.112.34:3000/Eloteroman/getOneCart?id=";
     private String TAG = "DEBUG";
+    private String ownerNameStr;
+    private String cartNameStr;
+    private String workingHoursStr;
+    private String workingNowStr;
+    private String cartImageStr;
+
+    //TODO add a Call Button
+    //TODO add a Navigation button with the below code
+//    Uri gmmIntentUri = Uri.parse(“google.navigation:q=” + vendor_inner.location.latitude + “,” + vendor_inner.location.longitude + “&mode=w”);
+//    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//    mapIntent.setPackage(“com.google.android.apps.maps”);
+//    startActivity(mapIntent);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +81,9 @@ public class DisplayVendorActivity extends AppCompatActivity {
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.foodListRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(new Adapter(this,FoodItemsList));
 
         ownerName = (TextView) findViewById(R.id.ownerNameTextView);
@@ -76,11 +92,32 @@ public class DisplayVendorActivity extends AppCompatActivity {
         workingHours = (TextView) findViewById(R.id.workingHoursTextView);
         workingNow = (TextView) findViewById(R.id.workingNowTextView);
         ratingBar = (RatingBar) findViewById(R.id.vendorRatingBar);
+        leaveARatingBar = (RatingBar) findViewById(R.id.ratingBarForLeavingARating);
         ratingCount = (TextView) findViewById(R.id.howManyReviewsTextView);
 
         getCartInfo(getOneCartURL + vendorID);
 
+        // TODO Do not allow review submission if submitted already
+        // TODO Find user review if exists and update user rating when vendor page loads
+        leaveARatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Intent i = new Intent(context, DisplayReviewActivity.class);
+                i.putExtra("rating", rating);
+                i.putExtra("cartName", cartImageStr);
+                i.putExtra("vendor_id", vendorID);
+                startActivity(i);
+            }
+        });
 
+
+    }
+
+    public void goToReviews(View view){
+        Intent i = new Intent(context, DisplayVendorReviewsActivity.class);
+        i.putExtra("vendor_id", vendorID);
+        i.putExtra("reviewsCount", ratingCount.getText());
+        startActivity(i);
     }
 
     // comment
@@ -89,16 +126,26 @@ public class DisplayVendorActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         JSONArray foodItems = null;
+                        ArrayList<String> vendorData = new ArrayList<String>();
                         try {
                             ownerName.setText(response.getString("ownerName"));
+                                vendorData.add(response.getString("ownerName")); // 0
                             cartName.setText(response.getString("cartName"));
+                                vendorData.add(response.getString("cartName")); // 1
+                            cartImageStr = response.getString("cartName");
                             if(!response.getString("picture").equals("NA")){
                                 Picasso.with(context).load(response.getString("picture")).into(cartImage);
+                                    vendorData.add(response.getString("picture")); // 2
                             }
                             workingHours.setText("Hours: " + response.getString("hours"));
+                                vendorData.add("Hours: " + response.getString("hours")); // 3
                             setWorkingNow(response.getString("currentlyInService"));
-                            ratingCount.setText(setRating(response.getJSONArray("reviewList")));
+                                vendorData.add(response.getString("currentlyInService")); // 4
+                            String temp = setRating(response.getJSONArray("reviewList"));
+                            ratingCount.setText(temp);
+                                vendorData.add(getRating(response.getJSONArray("reviewList"),vendorData)); // 5, 6
                             foodItems = response.getJSONArray("foodList");
+                            FoodItemsList.add(vendorData);
                             for(int i = 0; i < foodItems.length(); i++){
                                 JSONObject jsonObject = (JSONObject) foodItems.get(i);
                                 foodItem = new ArrayList<String>();
@@ -150,6 +197,26 @@ public class DisplayVendorActivity extends AppCompatActivity {
             counter++;
         }
         ratingBar.setRating(rating/counter);
+        if((int)counter > 1){
+            return String.valueOf((int)counter + " Reviews");
+        }else{
+            return String.valueOf((int)counter + " Review");
+        }
+    }
+
+    public String getRating (JSONArray reviewsList, ArrayList<String> arrayList) throws JSONException {
+        float rating = 0;
+        float counter = 0;
+        if(reviewsList.length() == 0){
+            arrayList.add("0");
+            return String.valueOf((int)0) + " Review";
+        }
+        for(int i = 0; i < reviewsList.length(); i++){
+            JSONObject review = (JSONObject) reviewsList.get(i);
+            rating += Float.valueOf(review.getString("rating"));
+            counter++;
+        }
+        arrayList.add(String.valueOf(rating/counter));
         if((int)counter > 1){
             return String.valueOf((int)counter + " Reviews");
         }else{

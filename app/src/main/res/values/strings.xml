@@ -5,6 +5,8 @@
     <string name="display_map_name">Map Page</string>
     <string name="display_vendor_name">Vendor Page</string>
     <string name="display_search_name">Search Page</string>
+    <string name="display_review_page">Leave a Review Page</string>
+    <string name="display_vendor_reviews_page">Vendor Reviews Page</string>
 
 
 
