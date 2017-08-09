@@ -4,12 +4,16 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
@@ -20,6 +24,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -57,6 +62,10 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
     private Context context;
     private ArrayList<VendorItem> vendors;
     private LatLng currentLoc;
+    private ArrayList<Marker> markers;
+    private HandlerThread handlerThread;
+    private Handler handler;
+    private Runnable runner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,10 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
 
         username = getIntent().getExtras().getString("username");
         context = this;
+        markers = null;
+        handler = null;
+        handlerThread = null;
+        runner = null;
 
         findViewById(R.id.quick_search_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +120,30 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 getCurrentLocation();
             }
         });
+    }
+
+    // overriding onStart to load from db every time the app starts/resumes
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "revived, restoring connections");
+        if(markers != null) {
+            updateMarkers();
+        }
+    }
+
+    // overriding onStop to "clean up" every time the app is shut down
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "died, severing connections");
+        if(handler != null) { // kills the handler task
+            handler.removeCallbacks(runner);
+            handler = null;
+            runner = null;
+            handlerThread.stop();
+            handlerThread = null;
+        }
     }
 
     public void getCurrentLocation() {
@@ -153,19 +190,15 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     @Override
                     public Void loadInBackground() {
                         // get all vendors
-                        vendors = null;
-                        URL vendorUrl = NetworkUtils.buildVendorUrl();
+                        vendors = queryVendorData();
 
                         try {
-                            String vendorJson = NetworkUtils.getResponseFromHttpUrl(vendorUrl);
-                            vendors = DataJsonUtils.parseVendorsFromJson(vendorJson);
-
                             for(int i=0; i<vendors.size(); i++) {
                                 VendorItem v = vendors.get(i);
                                 if(v.img_url != null)
                                     vendors.get(i).img = Picasso.with(context).load(v.img_url).get();
                             }
-                        } catch (Exception e) { // catch all exceptions
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -180,6 +213,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 Log.d(TAG, "loaded data for " + vendors.size() + " vendors from network");
 
                 // the following code sets a custom marker to be displayed instead of the default marker
+                markers = new ArrayList<Marker>();
                 Display d = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 d.getSize(size);
@@ -196,7 +230,10 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
 
                     double time = getTimeFromUser(v.location.latitude, v.location.longitude);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet((int)Math.round(time) + " mins away").icon(BitmapDescriptorFactory.fromBitmap(scaled)));
+                    Marker m = mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet((int)Math.round(time) + " mins away").icon(BitmapDescriptorFactory.fromBitmap(scaled)));
+                    markers.add(m);
+
+                    vendors.get(i).marker_id = m.getId();
 
                     Log.d(TAG, "distance: " + time + " mins");
                 }
@@ -282,6 +319,8 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
 
                 // enables custom info window view
                 mMap.setInfoWindowAdapter(new EloteroInfoWindowAdapter(context, vendors));
+
+                updateMarkers();
             }
 
             @Override
@@ -289,6 +328,68 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 // doesn't really do anything but is required for the interface
             }
         }).forceLoad();
+    }
+
+    private ArrayList<VendorItem> queryVendorData() {
+        ArrayList<VendorItem> temp_vendors = null;
+        URL vendorUrl = NetworkUtils.buildVendorUrl();
+
+        try {
+            String vendorJson = NetworkUtils.getResponseFromHttpUrl(vendorUrl);
+            temp_vendors = DataJsonUtils.parseVendorsFromJson(vendorJson);
+        } catch (Exception e) { // catch all exceptions
+            e.printStackTrace();
+        }
+
+        return temp_vendors;
+    }
+
+    private int findMarkerIndex(Marker m) {
+        Log.d(TAG, "looking for " + m.getId());
+        for(int i=0; i<vendors.size(); i++) {
+            Log.d(TAG, "found " + vendors.get(i).marker_id);
+            if(m.getId().equals(vendors.get(i).marker_id))
+                return i;
+        }
+
+        return -1;
+    }
+
+    private void updateMarkers() {
+        handlerThread = new HandlerThread(TAG + "Thread");
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+        runner = new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<VendorItem> temp = queryVendorData(); // will run in separate thread
+
+                for(int i=0; i<temp.size(); i++) {
+                    if(temp.get(i).id.equals(vendors.get(i).id)) {
+                        vendors.get(i).location.latitude = temp.get(i).location.latitude;
+                        vendors.get(i).location.longitude = temp.get(i).location.longitude;
+                    }
+                }
+
+                Handler mainHandler = new Handler(context.getMainLooper());
+                mainHandler.post(new Runnable() { // this will happen on main thread now
+                    @Override
+                    public void run() {
+                        for(int i=0; i<markers.size(); i++) {
+                            int j = findMarkerIndex(markers.get(i));
+
+                            markers.get(i).setPosition(new LatLng(vendors.get(j).location.latitude, vendors.get(j).location.longitude));
+                        }
+
+                        Toast.makeText(context, "updated marker positions", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                handler.postDelayed(this, 10000);
+            }
+        };
+
+        handler.postDelayed(runner, 10000);
     }
 
     @Override

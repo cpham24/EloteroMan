@@ -18,8 +18,8 @@ public class VendorItem {
     public String img_url;
     public VendorLocationItem location;
     public ArrayList<FoodItem> food_list;
-    public String marker_id;
     public Bitmap img;
+    public String marker_id;
 
     public VendorItem() {
         // empty constructor
@@ -36,5 +36,6 @@ public class VendorItem {
         this.location = location;
         this.food_list = food_list;
         this.img = null;
+        this.marker_id = null;
     }
 }
