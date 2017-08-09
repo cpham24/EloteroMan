@@ -33,7 +33,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.SphericalUtil;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -156,6 +158,12 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                         try {
                             String vendorJson = NetworkUtils.getResponseFromHttpUrl(vendorUrl);
                             vendors = DataJsonUtils.parseVendorsFromJson(vendorJson);
+
+                            for(int i=0; i<vendors.size(); i++) {
+                                VendorItem v = vendors.get(i);
+                                if(v.img_url != null)
+                                    vendors.get(i).img = Picasso.with(context).load(v.img_url).get();
+                            }
                         } catch (Exception e) { // catch all exceptions
                             e.printStackTrace();
                         }
@@ -185,9 +193,11 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     Log.d(TAG, "added a marker for " + v.cart_name);
                     Log.d(TAG, "location: " + v.location.latitude + ", " + v.location.longitude);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name).icon(BitmapDescriptorFactory.fromBitmap(scaled)));
+                    double time = getTimeFromUser(v.location.latitude, v.location.longitude);
 
-                    Log.d(TAG, "distance: " + getTimeFromUser(v.location.latitude, v.location.longitude) + " mins");
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet((int)Math.round(time) + " mins away").icon(BitmapDescriptorFactory.fromBitmap(scaled)));
+
+                    Log.d(TAG, "distance: " + time + " mins");
                 }
 
                 // enables interaction with the markers

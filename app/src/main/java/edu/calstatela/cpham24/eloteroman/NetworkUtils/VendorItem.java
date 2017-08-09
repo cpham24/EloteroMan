@@ -1,5 +1,7 @@
 package edu.calstatela.cpham24.eloteroman.NetworkUtils;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 
 /**
@@ -17,6 +19,7 @@ public class VendorItem {
     public VendorLocationItem location;
     public ArrayList<FoodItem> food_list;
     public String marker_id;
+    public Bitmap img;
 
     public VendorItem() {
         // empty constructor
@@ -32,5 +35,6 @@ public class VendorItem {
         this.img_url = img_url;
         this.location = location;
         this.food_list = food_list;
+        this.img = null;
     }
 }

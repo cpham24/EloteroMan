@@ -79,15 +79,9 @@ public class EloteroInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
                 vendor = v;
         }
 
-        /*
-        String imgurl = vendor.img_url;
-
         ImageView infoImage = (ImageView) view.findViewById(R.id.infoImage);
-
-        if(imgurl != null) { // use picasso to load vendor image if it exists
-            Picasso.with(context).load(imgurl).into(infoImage);
-        }
-        */
+        if(vendor.img != null)
+            infoImage.setImageBitmap(vendor.img);
 
         String title = marker.getTitle();
         TextView titleUi = ((TextView) view.findViewById(R.id.infoTitle));
