@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -54,9 +55,10 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     ArrayList<favoriteCart> cartList=new ArrayList<favoriteCart>();
     ArrayList<String> ids;
     String imageUrl;
-
+    Boolean swiped=false;
     ImageButton logoutBtn;
     Button editBtn;
+    String cartId;
 
     String username;
 
@@ -81,6 +83,8 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
         userPrefs = getSharedPreferences(USER_PREFS, 0);
         username = getIntent().getExtras().getString("username");
+
+
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 
@@ -115,9 +119,32 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(context, DisplayEditProfileActivity.class);
+                i.putExtra("user_id", current_user.getId());
+                i.putExtra("user_name", current_user.getName());
+                i.putExtra("user_username", current_user.getUsername());
+                i.putExtra("user_isPublic", current_user.getIsPublic());
+                startActivity(i);
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int id = (int) viewHolder.getLayoutPosition();
+                swiped=true;
+                cartId = cartList.get(id).getId();
+                load();
+                Log.d(TAG, "passing id: " + cartId);
+
+            }
+        }).attachToRecyclerView(mRecyclerView);
 
         load();
 
@@ -143,14 +170,31 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
             @Override
             public Void loadInBackground() {
                 URL url;
-                if(username!=null){
-                    url=JNetworkUtils.buildUrlGetOneUserWithUsername(username);
+                URL urlSwipe;
+
+                if(swiped){
+                    urlSwipe = JNetworkUtils.buildUrlDeleteFavoriteCartFromUser(user_id,cartId);
+
+
+                }else{
+                    urlSwipe = JNetworkUtils.buildUrlDeleteFavoriteCartFromUser("","");
                 }
-                else {
-                    url=JNetworkUtils.buildUrlGetOneUser(user_id);}
+
+                if (username != null) {
+                    url = JNetworkUtils.buildUrlGetOneUserWithUsername(username);
+                } else {
+                    url = JNetworkUtils.buildUrlGetOneUser(user_id);
+                }
+
+
 
                 try {
-
+                    if(swiped){
+                        JNetworkUtils.getResponseFromHttpUrl(urlSwipe);
+                        swiped=false;
+                        cartId=null;
+                        cartList.clear();
+                    }
                     String json = JNetworkUtils.getResponseFromHttpUrl(url);
                     if(username!=null){
                         current_user = JNetworkUtils.parseLoginUserJSON(json);
@@ -228,7 +272,9 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
                     @Override
                     public void onItemClick(int clickedItemIndex, String cartId) {
 
-                        Log.d(TAG, String.format("id: %s", cartId));
+                        Intent i = new Intent(context, DisplayVendorActivity.class);
+                        i.putExtra("vendor_id", cartId);
+                        startActivity(i);
                         Toast.makeText(context, "id: "+cartId, Toast.LENGTH_SHORT).show();
                     }
                 });

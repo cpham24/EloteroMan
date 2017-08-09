@@ -115,7 +115,46 @@ public class JNetworkUtils {
         Log.v(TAG, "Built Uri: " + url);
         return url;
     }
+    // example 162.243.112.34:3000/EloteroMan/removeFavoriteCarttoUser?userId=1233&cartId=231
+    public static URL buildUrlDeleteFavoriteCartFromUser(String userId,String cartId){
 
+        Uri builtUri=
+                Uri.parse(ELOTEROMAN_BASE_URL+"/"+"removeFavoriteCarttoUser").buildUpon()
+                        .appendQueryParameter("userId",userId)
+                        .appendQueryParameter("cartId",cartId)
+                        .build();
+        URL url=null;
+
+        try{
+            url=new URL (builtUri.toString());
+        }catch(MalformedURLException e){
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built Uri: " + url);
+        return url;
+    }
+
+    //example: 162.243.112.34:3000/Eloteroman/modifyUserProperties/596d335cb158f84ac6fb474d?username=Bear
+    public static URL buildUrlModifyUser(String id, String name, String username, String isPublic){
+
+        Uri builtUri=
+                Uri.parse(ELOTEROMAN_BASE_URL+"/"+"modifyUserProperties/"+id).buildUpon()
+                        .appendQueryParameter("name",name)
+                        .appendQueryParameter("username",username)
+                        .appendQueryParameter("public",isPublic)
+                        .build();
+        URL url=null;
+
+        try{
+            url=new URL (builtUri.toString());
+        }catch(MalformedURLException e){
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built Uri: " + url);
+        return url;
+    }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
