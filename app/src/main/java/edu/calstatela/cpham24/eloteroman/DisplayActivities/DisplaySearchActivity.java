@@ -485,8 +485,10 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
             EloAdapt adapter = new EloAdapt(s, new EloAdapt.ItemClickListener() {
                 @Override
                 public void onItemClick(int clickedItemIndex, String vendId) {
-
-
+                    Log.d(TAG, "clicked on item " + clickedItemIndex + " with " + vendId);
+                    Intent i = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
+                    i.putExtra("vendor_id", vendId);
+                    startActivity(i);
                 }
             });
             rv.setAdapter(adapter);

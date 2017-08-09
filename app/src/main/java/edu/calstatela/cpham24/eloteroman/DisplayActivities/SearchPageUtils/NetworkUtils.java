@@ -179,7 +179,7 @@ public class NetworkUtils {
                         Oname.toLowerCase().contains(check.toLowerCase()) || stree.toLowerCase().contains(check.toLowerCase())){
                     Log.d(TAG , " name here " + name);
                     Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                            sorted, rot, picture, stree, cit);
+                            rot, sorted, picture, stree, cit);
                     result.add(repo);
                     Log.d(TAG, " where8 " + result);
                 }
@@ -193,7 +193,7 @@ public class NetworkUtils {
 
                         if (foodName.toLowerCase().contains(check.toLowerCase())) {
                             Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                                    sorted, rot, picture, stree, cit);
+                                    rot, sorted, picture, stree, cit);
                             result.add(repo);
                             Log.d(TAG, " where9 " + result);
                             break;
@@ -207,7 +207,7 @@ public class NetworkUtils {
 
             else {
                 Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                        sorted, rot, picture, stree, cit);
+                        rot, sorted, picture, stree, cit);
                 result.add(repo);
 
                 for (int k = 0; k < revs.length(); ++k) {
@@ -372,7 +372,7 @@ public class NetworkUtils {
 
 
             Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitutde,
-                    sorted, rot, picture, stree, cit);
+                    rot, sorted, picture, stree, cit);
             result.add(repo);
 
             for (int k = 0; k < revs.length(); ++k) {
