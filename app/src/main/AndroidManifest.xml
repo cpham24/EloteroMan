@@ -47,12 +47,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".DisplayActivities.DisplayLoginActivity"
                   android:label="@string/display_login_name"
                   android:parentActivityName=".MainActivity"/>
         <activity android:name=".DisplayActivities.DisplayProfileActivity"
                   android:label="@string/display_profile_name"
                   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplayEditProfileActivity"
+            android:label="@string/display_edit_profile_name"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".DisplayActivities.DisplayMapActivity"
                   android:label="@string/display_map_name"
                   android:parentActivityName=".MainActivity"/>
