@@ -2,12 +2,14 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,8 +26,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import edu.calstatela.cpham24.eloteroman.VendorUtils.Adapter;
 import edu.calstatela.cpham24.eloteroman.R;
+import edu.calstatela.cpham24.eloteroman.VendorUtils.Adapter;
 
 public class DisplayVendorActivity extends AppCompatActivity {
 
@@ -41,7 +43,11 @@ public class DisplayVendorActivity extends AppCompatActivity {
     private String vendorID;
     private TextView ownerName;
     private TextView cartName;
+    private TextView workingHours;
+    private TextView workingNow;
     private ImageView cartImage;
+    private RatingBar ratingBar;
+    private TextView ratingCount;
     private String getOneCartURL = "http://162.243.112.34:3000/Eloteroman/getOneCart?id=";
     private String TAG = "DEBUG";
 
@@ -49,7 +55,6 @@ public class DisplayVendorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_vendor);
-
         context = this;
 
         requestQueue = Volley.newRequestQueue(this);
@@ -68,6 +73,10 @@ public class DisplayVendorActivity extends AppCompatActivity {
         ownerName = (TextView) findViewById(R.id.ownerNameTextView);
         cartName = (TextView) findViewById(R.id.cartNameTextView);
         cartImage = (ImageView) findViewById(R.id.cartImageView);
+        workingHours = (TextView) findViewById(R.id.workingHoursTextView);
+        workingNow = (TextView) findViewById(R.id.workingNowTextView);
+        ratingBar = (RatingBar) findViewById(R.id.vendorRatingBar);
+        ratingCount = (TextView) findViewById(R.id.howManyReviewsTextView);
 
         getCartInfo(getOneCartURL + vendorID);
 
@@ -86,7 +95,9 @@ public class DisplayVendorActivity extends AppCompatActivity {
                             if(!response.getString("picture").equals("NA")){
                                 Picasso.with(context).load(response.getString("picture")).into(cartImage);
                             }
-
+                            workingHours.setText("Hours: " + response.getString("hours"));
+                            setWorkingNow(response.getString("currentlyInService"));
+                            ratingCount.setText(setRating(response.getJSONArray("reviewList")));
                             foodItems = response.getJSONArray("foodList");
                             for(int i = 0; i < foodItems.length(); i++){
                                 JSONObject jsonObject = (JSONObject) foodItems.get(i);
@@ -113,5 +124,36 @@ public class DisplayVendorActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void setWorkingNow(String input){
+        workingNow.setText(input);
+        if(input.contains("false")){
+            workingNow.setText("Not Available");
+            workingNow.setTextColor(Color.RED);
+        }else if(input.contains("true")){
+            workingNow.setText("Available");
+            workingNow.setTextColor(Color.GREEN);
+        }
+    }
+
+    public String setRating (JSONArray reviewsList) throws JSONException {
+        float rating = 0;
+        float counter = 0;
+        if(reviewsList.length() == 0){
+            ratingBar.setRating(0);
+            return String.valueOf((int)0) + " Review";
+        }
+        for(int i = 0; i < reviewsList.length(); i++){
+            JSONObject review = (JSONObject) reviewsList.get(i);
+            rating += Float.valueOf(review.getString("rating"));
+            counter++;
+        }
+        ratingBar.setRating(rating/counter);
+        if((int)counter > 1){
+            return String.valueOf((int)counter + " Reviews");
+        }else{
+            return String.valueOf((int)counter + " Review");
+        }
     }
 }
