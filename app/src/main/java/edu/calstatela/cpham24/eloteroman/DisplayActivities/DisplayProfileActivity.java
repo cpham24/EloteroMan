@@ -84,9 +84,14 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 
-        if(isLoggedIn){
+        if(isLoggedIn||username!=null){
+            if(isLoggedIn){
             user_id=userPrefs.getString("id","");
-            Toast.makeText(this, "User id: " +user_id, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "User id: " +user_id, Toast.LENGTH_SHORT).show();}
+            else{
+
+                Toast.makeText(this, "Username: " +username, Toast.LENGTH_SHORT).show();
+            }
 
         }else{
             launchLogin();
@@ -137,14 +142,21 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
             @Override
             public Void loadInBackground() {
-
-                URL url=JNetworkUtils.buildUrlGetOneUser(user_id);
-
+                URL url;
+                if(username!=null){
+                    url=JNetworkUtils.buildUrlGetOneUserWithUsername(username);
+                }
+                else {
+                    url=JNetworkUtils.buildUrlGetOneUser(user_id);}
 
                 try {
 
                     String json = JNetworkUtils.getResponseFromHttpUrl(url);
-                    current_user = JNetworkUtils.parseUserJSON(json);
+                    if(username!=null){
+                        current_user = JNetworkUtils.parseLoginUserJSON(json);
+                    }else{
+                        current_user = JNetworkUtils.parseUserJSON(json);}
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
