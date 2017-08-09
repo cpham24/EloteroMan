@@ -2,6 +2,7 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.ColorRes;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -88,7 +89,7 @@ public class EloteroInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         if (title != null) {
             // Spannable string allows us to edit the formatting of the text.
             SpannableString titleText = new SpannableString(title);
-            titleText.setSpan(new ForegroundColorSpan(Color.RED), 0, titleText.length(), 0);
+            titleText.setSpan(new ForegroundColorSpan(view.getResources().getColor(R.color.colorAccent)), 0, titleText.length(), 0);
             titleUi.setText(titleText);
         } else {
             titleUi.setText("");

@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.SphericalUtil;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
     // return the distance from user in minutes
     private double getTimeFromUser(double lat, double lon) {
         // adjust this constant to change the reading
-        final double USER_SPEED = 67.5; // in meters per hour
+        final double USER_SPEED = 67.8; // in meters per hour
         return SphericalUtil.computeDistanceBetween(currentLoc, new LatLng(lat, lon)) / USER_SPEED;
     }
 
@@ -232,31 +233,19 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                                 vendor = v;
                         }
 
-                        if(vendor != null) {
-                            Intent i = new Intent(context, DisplayVendorActivity.class);
-                            i.putExtra("vendor_id", vendor.id);
-                            startActivity(i);
-                        }
-                    }
-                });
-
-                mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
-                    @Override
-                    public void onInfoWindowLongClick(Marker marker) {
-                        VendorItem vendor = null;
-
-                        for(int i=0; i<vendors.size(); i++) { // find a vendor item based on position
-                            LatLng pos = marker.getPosition();
-                            VendorItem v = vendors.get(i);
-                            if(v.location.latitude == pos.latitude && v.location.longitude == pos.longitude)
-                                vendor = v;
-                        }
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        vendor.img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] buffer = stream.toByteArray();
 
                         MapDialogFragment df = new MapDialogFragment();
                         Bundle args = new Bundle();
                         args.putString("id", vendor.id);
                         args.putString("cart_name", vendor.cart_name);
                         args.putString("owner_name", vendor.owner_name);
+                        args.putString("days", vendor.days);
+                        args.putString("hours", vendor.hours);
+                        args.putBoolean("working", vendor.in_service);
+                        args.putByteArray("img", buffer);
                         df.setArguments(args);
 
                         final VendorItem vendor_inner = vendor;
