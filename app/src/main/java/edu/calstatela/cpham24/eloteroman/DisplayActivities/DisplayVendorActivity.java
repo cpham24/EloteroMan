@@ -3,12 +3,14 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -42,6 +44,7 @@ public class DisplayVendorActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
     private String vendorID;
+    private double[] crds = new double[2];
     private TextView ownerName;
     private TextView cartName;
     private TextView workingHours;
@@ -57,13 +60,12 @@ public class DisplayVendorActivity extends AppCompatActivity {
     private String workingHoursStr;
     private String workingNowStr;
     private String cartImageStr;
+    private Button goToMapButton;
+    private Button addFavButton;
 
     //TODO add a Call Button
     //TODO add a Navigation button with the below code
-//    Uri gmmIntentUri = Uri.parse(“google.navigation:q=” + vendor_inner.location.latitude + “,” + vendor_inner.location.longitude + “&mode=w”);
-//    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//    mapIntent.setPackage(“com.google.android.apps.maps”);
-//    startActivity(mapIntent);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,19 @@ public class DisplayVendorActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.vendorRatingBar);
         leaveARatingBar = (RatingBar) findViewById(R.id.ratingBarForLeavingARating);
         ratingCount = (TextView) findViewById(R.id.howManyReviewsTextView);
+        goToMapButton = (Button) findViewById(R.id.gotToMapButton);
+        addFavButton = (Button) findViewById(R.id.favButton);
+
+        goToMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + crds[1] + "," + crds[0] + "&mode=w");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
 
         getCartInfo(getOneCartURL + vendorID);
 
@@ -126,26 +141,27 @@ public class DisplayVendorActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         JSONArray foodItems = null;
-                        ArrayList<String> vendorData = new ArrayList<String>();
+                        JSONArray coords = null;
+//                        ArrayList<String> vendorData = new ArrayList<String>();
                         try {
                             ownerName.setText(response.getString("ownerName"));
-                                vendorData.add(response.getString("ownerName")); // 0
+//                                vendorData.add(response.getString("ownerName")); // 0
                             cartName.setText(response.getString("cartName"));
-                                vendorData.add(response.getString("cartName")); // 1
+//                                vendorData.add(response.getString("cartName")); // 1
                             cartImageStr = response.getString("cartName");
                             if(!response.getString("picture").equals("NA")){
                                 Picasso.with(context).load(response.getString("picture")).into(cartImage);
-                                    vendorData.add(response.getString("picture")); // 2
+//                                    vendorData.add(response.getString("picture")); // 2
                             }
                             workingHours.setText("Hours: " + response.getString("hours"));
-                                vendorData.add("Hours: " + response.getString("hours")); // 3
+//                                vendorData.add("Hours: " + response.getString("hours")); // 3
                             setWorkingNow(response.getString("currentlyInService"));
-                                vendorData.add(response.getString("currentlyInService")); // 4
+//                                vendorData.add(response.getString("currentlyInService")); // 4
                             String temp = setRating(response.getJSONArray("reviewList"));
                             ratingCount.setText(temp);
-                                vendorData.add(getRating(response.getJSONArray("reviewList"),vendorData)); // 5, 6
+//                                vendorData.add(getRating(response.getJSONArray("reviewList"),vendorData)); // 5, 6
                             foodItems = response.getJSONArray("foodList");
-                            FoodItemsList.add(vendorData);
+//                            FoodItemsList.add(vendorData);
                             for(int i = 0; i < foodItems.length(); i++){
                                 JSONObject jsonObject = (JSONObject) foodItems.get(i);
                                 foodItem = new ArrayList<String>();
@@ -158,7 +174,10 @@ public class DisplayVendorActivity extends AppCompatActivity {
                                 FoodItemsList.add(foodItem);
                                 Log.d(TAG, jsonObject.getString("name"));
                             }
-
+                            JSONObject location = (JSONObject) response.get("location");
+                            coords = location.getJSONArray("coordinates");
+                            crds[0] = (double) coords.get(0);
+                            crds[1] = (double) coords.get(1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

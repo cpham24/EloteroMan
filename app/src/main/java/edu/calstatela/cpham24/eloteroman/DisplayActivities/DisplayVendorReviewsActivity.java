@@ -3,10 +3,13 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -32,7 +35,7 @@ import edu.calstatela.cpham24.eloteroman.VendorUtils.ReviewsAdapter;
  * Created by Dezval on 8/7/2017.
  */
 
-public class DisplayVendorReviewsActivity extends AppCompatActivity {
+public class DisplayVendorReviewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
 
     private String[] temp = {"ITEM ONE", "ITEM TWO", "ITEM THREE", "ITEM FOUR", "ITEM FIVE"};
     private ArrayList<ArrayList<String>> ReviewsList = new ArrayList<ArrayList<String>>();
@@ -88,12 +91,17 @@ public class DisplayVendorReviewsActivity extends AppCompatActivity {
 
         backButton = (Button) findViewById(R.id.returnToVendorButton);
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, DisplayVendorActivity.class);
+                i.putExtra("vendor_id", vendorID);
+                startActivity(i);
+            }
+        });
+
         Log.d(TAG,"Getting User Reviews");
         getUserReviews(getOneCartURL + vendorID);
-
-
-
-
 
 
     }
@@ -112,7 +120,7 @@ public class DisplayVendorReviewsActivity extends AppCompatActivity {
     }
 
     // comment
-    private synchronized void getUserReviews(String myURL){
+    private void getUserReviews(String myURL){
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myURL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -131,7 +139,7 @@ public class DisplayVendorReviewsActivity extends AppCompatActivity {
 
                     Log.d(TAG,"Getting User Info");
                     for(int i = 0; i < USERS_IDS.size(); i++){
-                        Log.d(TAG,"Checking User IDs Above: " + USERS_IDS.get(i));
+                        Log.d(TAG,"Checking User IDs Above: " + USERS_IDS.get(i) + " | USERS_IDS size: " + USERS_IDS.size());
                         findUserInfo(getOneUserURL + USERS_IDS.get(i));
                     }
 
@@ -149,7 +157,7 @@ public class DisplayVendorReviewsActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private synchronized void findUserInfo(String myURL){
+    private void findUserInfo(String myURL){
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myURL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -157,7 +165,7 @@ public class DisplayVendorReviewsActivity extends AppCompatActivity {
                     Log.d(TAG, "users name from response: " + response.getString("name"));
                     USERS_NAMES.add(response.getString("name"));
                     USERS_IMGS.add(response.getString("avatar"));
-                    Log.d(TAG,"USERS_IDS size: " + USERS_IDS.size());
+                    Log.d(TAG,"USERS_IDS size: " + USERS_IDS.size() + " | USERS_NAMES size: " + USERS_NAMES.size() + " | ReviewCount: " + reviewsCount);
                     if(USERS_NAMES.size() == reviewsCount){
                         populateReviewsList();
                     }
@@ -174,5 +182,20 @@ public class DisplayVendorReviewsActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public Loader<Void> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Void> loader) {
+
     }
 }
