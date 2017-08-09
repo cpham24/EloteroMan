@@ -101,7 +101,8 @@ public class DisplayLoginActivity extends AppCompatActivity implements LoaderMan
             edit.putString("id",current_user.getId());
             edit.putBoolean("isLoggedIn",true);
             edit.commit();
-            Intent i = new Intent(this, DisplayProfileActivity.class);
+            Intent i = new Intent(this, DisplayMapActivity.class);
+            i.putExtra("username", username);
             startActivity(i);
 
 

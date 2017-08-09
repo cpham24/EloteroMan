@@ -80,7 +80,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
         editBtn = (Button) findViewById(R.id.edit_user_btn);
 
         userPrefs = getSharedPreferences(USER_PREFS, 0);
-        //username = getIntent().getExtras().getString("username");
+        username = getIntent().getExtras().getString("username");
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 
