@@ -110,8 +110,8 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                 mMap = googleMap;
                 mMap.getUiSettings().setMapToolbarEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setCompassEnabled(false);
                 getCurrentLocation();
-                loadData();
             }
         });
     }
@@ -130,6 +130,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "my current position is " + location.getLatitude() + ", " + location.getLongitude());
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, DEFAULT_ZOOM), 1000, null);
+                    loadData();
                 }
             }
         });
