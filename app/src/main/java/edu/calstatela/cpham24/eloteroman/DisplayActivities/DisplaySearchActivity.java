@@ -148,8 +148,17 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
         Log.d(TAG, " wwww " + latitude + " and " + longitude);
 
+        Bundle b = getIntent().getExtras();
+        if(b != null) {
+            String value = b.getString("query");
+            load(value);
+        }
 
-        load(null);
+        else {
+            load(null);
+        }
+
+
 
 
     }
@@ -264,7 +273,11 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onItemClick(int clickedItemIndex, String vendId) {
-
+        Intent intent = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
+        Bundle b = new Bundle();
+        b.putString("vendor_id", vendId ); //Your id
+        intent.putExtras(b); //Put your id to your next Intent
+        startActivity(intent);
     }
 
     @Override
@@ -472,11 +485,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
             EloAdapt adapter = new EloAdapt(s, new EloAdapt.ItemClickListener() {
                 @Override
                 public void onItemClick(int clickedItemIndex, String vendId) {
-                    Intent intent = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString("vendor_id", vendId ); //Your id
-                    intent.putExtras(b); //Put your id to your next Intent
-                    startActivity(intent);
+
 
                 }
             });
