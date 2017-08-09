@@ -86,7 +86,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
             Vender repo = data.get(pos);
 
             name.setText(repo.getName());
-            desc.setText("Works: " + repo.getDesc());
+            desc.setText(repo.getStreet() + ", " + repo.getCity());
             worH.setText(repo.getWorkHour());
 
             if (repo.getWork() == true) {

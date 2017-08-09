@@ -149,7 +149,18 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
         Log.d(TAG, " wwww " + latitude + " and " + longitude);
 
 
-        load(null);
+        Intent intent = getIntent();
+
+        Bundle extras = intent.getExtras();
+        if(extras != null) {
+            String back = extras.getString("query");
+            search.setText(back);
+            load(back);
+        }
+         else {
+            load(null);
+        }
+
 
 
     }
