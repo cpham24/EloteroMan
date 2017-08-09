@@ -3,48 +3,52 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:padding="5dp"
     android:weightSum="1">
 
     <ImageView
         android:id = "@+id/imgYes"
-        android:layout_width="145dp"
-        android:layout_height="145dp"
-        android:layout_weight="0.4"/>
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_weight="0.3"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_weight="0.6"
-        android:padding="30dp">
+        android:layout_weight="0.7"
+        android:padding="20dp">
 
         <TextView
             android:id = "@+id/venderName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
+            android:textColor="@color/dark"
             />
 
         <TextView
             android:id = "@+id/venderDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="14dp"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
             />
 
         <TextView
             android:id = "@+id/venderHour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="14dp"
             />
 
         <TextView
             android:id = "@+id/venderIsWork"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="14dp"
             />
 
 
