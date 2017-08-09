@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -62,6 +64,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
     private FusedLocationProviderClient mFusedLocationClient;
     private Context context;
     private ArrayList<VendorItem> vendors;
+    private LatLng currentLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +127,19 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                    currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "my current position is " + location.getLatitude() + ", " + location.getLongitude());
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, DEFAULT_ZOOM), 1000, null);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, DEFAULT_ZOOM), 1000, null);
                 }
             }
         });
+    }
+
+    // return the distance from user in minutes
+    private double getTimeFromUser(double lat, double lon) {
+        // adjust this constant to change the reading
+        final double USER_SPEED = 67.5; // in meters per hour
+        return SphericalUtil.computeDistanceBetween(currentLoc, new LatLng(lat, lon)) / USER_SPEED;
     }
 
     private void loadData() {
@@ -185,6 +195,8 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                     Log.d(TAG, "location: " + v.location.latitude + ", " + v.location.longitude);
 
                     mMap.addMarker(new MarkerOptions().position(new LatLng(v.location.latitude, v.location.longitude)).title(v.cart_name).snippet(v.owner_name).icon(BitmapDescriptorFactory.fromBitmap(scaled)));
+
+                    Log.d(TAG, "distance: " + getTimeFromUser(v.location.latitude, v.location.longitude) + " mins");
                 }
 
                 // enables interaction with the markers
@@ -246,6 +258,8 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                         args.putString("owner_name", vendor.owner_name);
                         df.setArguments(args);
 
+                        final VendorItem vendor_inner = vendor;
+
                         df.setCallback(new MapDialogFragment.MapDialogCallback() {
                             @Override
                             public void OnMoreInfoClick(String id) {
@@ -258,6 +272,11 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
                             public void OnDirectionsClick(String id) {
                                 // todo: send lat long to built-in Maps
                                 Log.d(TAG, "user chose to view directions");
+                                // Creates an intent to load walking directions
+                                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + vendor_inner.location.latitude + "," + vendor_inner.location.longitude + "&mode=w");
+                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                mapIntent.setPackage("com.google.android.apps.maps");
+                                startActivity(mapIntent);
                             }
 
                             @Override
