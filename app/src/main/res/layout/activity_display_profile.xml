@@ -41,7 +41,7 @@
                 android:paddingLeft="12dp"
                 android:paddingTop="14dp"
                 android:text="name"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/dark"
                 android:textSize="24dp"
 
                 />
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="12dp"
                 android:text="username:"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/dark"
                 android:textSize="24dp" />
 
             <Button
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_logout"
-                android:background="@color/colorWhite"/>
+                android:background="@color/white"/>
         </LinearLayout>
 
     </LinearLayout>

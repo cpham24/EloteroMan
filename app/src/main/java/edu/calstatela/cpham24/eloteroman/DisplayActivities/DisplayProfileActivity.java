@@ -54,12 +54,12 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     ArrayList<favoriteCart> cartList=new ArrayList<favoriteCart>();
     ArrayList<String> ids;
     String imageUrl;
-<<<<<<< HEAD
+
     ImageButton logoutBtn;
     Button editBtn;
-=======
+
     String username;
->>>>>>> master
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
         editBtn = (Button) findViewById(R.id.edit_user_btn);
 
         userPrefs = getSharedPreferences(USER_PREFS, 0);
-        username = getIntent().getExtras().getString("username");
+        //username = getIntent().getExtras().getString("username");
 
         Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
 

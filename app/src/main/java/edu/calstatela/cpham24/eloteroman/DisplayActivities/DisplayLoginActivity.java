@@ -41,11 +41,25 @@ public class DisplayLoginActivity extends AppCompatActivity implements LoaderMan
         loginBtn=(Button)findViewById(R.id.login_button);
         usernameET=(EditText) findViewById(R.id.usernameET);
 
+        userPrefs = getSharedPreferences(USER_PREFS, 0);
+
+
+
+        Boolean isLoggedIn=userPrefs.getBoolean("isLoggedIn",false);
+
+        if(!isLoggedIn){
+            Log.v(TAG, "isLoggedIn: " + isLoggedIn);
+            current_user=null;
+
+
+        }
+        Log.v(TAG, "isLoggedIn: " + isLoggedIn);
         loginBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 username=usernameET.getText().toString();
+                Log.v(TAG, "username: "+username);
                 load();
             }
         });
@@ -57,13 +71,14 @@ public class DisplayLoginActivity extends AppCompatActivity implements LoaderMan
             @Override
             public Void loadInBackground() {
                 URL url= JNetworkUtils.buildUrlGetOneUserWithUsername(username);
-
+                Log.v(TAG, "load username: " + username);
 
                 try {
 
                     String json = JNetworkUtils.getResponseFromHttpUrl(url);
                     if(json!=null&&json.length()>5)
                         current_user = JNetworkUtils.parseLoginUserJSON(json);
+                        Log.v(TAG, "currentUser: " + current_user);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -77,12 +92,10 @@ public class DisplayLoginActivity extends AppCompatActivity implements LoaderMan
         };
     }
 
-
-
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
         if(current_user!=null){
-        Toast.makeText(this,"success id: "+current_user.getId(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"success id: "+current_user.getId(),Toast.LENGTH_SHORT).show();
             userPrefs = getSharedPreferences(USER_PREFS, 0);
             SharedPreferences.Editor edit=userPrefs.edit();
             edit.putString("id",current_user.getId());

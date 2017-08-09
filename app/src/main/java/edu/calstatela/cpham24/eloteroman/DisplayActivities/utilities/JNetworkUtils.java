@@ -40,7 +40,7 @@ public class JNetworkUtils {
     private static final String COLLECTION_FOOD="food";
 
     private static final String ID_PARAM="id";
-    private static final String USERNAME_PARAM="username";
+    private static final String USERNAME_PARAM="name";
 
 
     public static URL buildUrlCollectionFieldLike(String collection, String field, String like){
@@ -61,7 +61,7 @@ public class JNetworkUtils {
     }
 
     public static URL buildUrlGetOneUser(String id){
-        Log.d("Comments", "_______________________buildUrl______________________");
+
         Uri builtUri=
                 Uri.parse(ELOTEROMAN_BASE_URL+"/"+"getOneUser").buildUpon()
                         .appendQueryParameter(ID_PARAM,id)
@@ -80,7 +80,7 @@ public class JNetworkUtils {
 
     //example http://162.243.112.34:3000/Eloteroman/getOneCart?id=5983e79f0df161632aa3ad62
     public static URL buildUrlGetOneCart(String id){
-        Log.d("Comments", "_______________________buildUrlForCArt______________________");
+
         Uri builtUri=
                 Uri.parse(ELOTEROMAN_BASE_URL+"/"+"getOneCart").buildUpon()
                         .appendQueryParameter(ID_PARAM,id)
@@ -99,7 +99,7 @@ public class JNetworkUtils {
 
     //example http://162.243.112.34:3000/Eloteroman/findUsersWhere?username=Bear
     public static URL buildUrlGetOneUserWithUsername(String username){
-        Log.d("Comments", "_______________________buildUrlForUser______________________");
+
         Uri builtUri=
                 Uri.parse(ELOTEROMAN_BASE_URL+"/"+"findUsersWhere").buildUpon()
                         .appendQueryParameter(USERNAME_PARAM,username)
@@ -119,7 +119,7 @@ public class JNetworkUtils {
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        Log.d("Comments", "_______________________getResponse______________________");
+
         try{
 
             InputStream in = urlConnection.getInputStream();
@@ -140,7 +140,7 @@ public class JNetworkUtils {
     }
 
     public static user parseUserJSON(String json) throws JSONException {
-        Log.d("Comments", "_______________________parseUserJason______________________");
+
         user result;
         String FoodCartId="";
         ArrayList<String> favoriteFoodCartIds = new ArrayList<>();
@@ -169,7 +169,7 @@ public class JNetworkUtils {
     }
 
     public static user parseLoginUserJSON(String json) throws JSONException {
-        Log.d("Comments", "_______________________parseUserJason______________________");
+
         user result;
         String FoodCartId="";
         ArrayList<String> favoriteFoodCartIds = new ArrayList<>();
@@ -199,10 +199,9 @@ public class JNetworkUtils {
     }
 
     public static favoriteCart parseFavoriteCartJSON(String json) throws JSONException {
-        Log.d("Comments", "_______________________parseCartJson______________________");
+
         favoriteCart result;
-//        ArrayList<String> favoriteFoodCartIds = new ArrayList<>();
-        Log.d("Comments", json);
+
         JSONObject main = new JSONObject(json);
 
 
