@@ -21,7 +21,7 @@ public class Vender implements Comparable {
     private double userlat;
     private double userlon;
     private String ID;
-    private ArrayList<Integer> rateMe = new ArrayList<>();
+    private ArrayList<Double> rateMe = new ArrayList<>();
     private String sortBy;
     private String picture;
     private String street;
@@ -106,22 +106,24 @@ public class Vender implements Comparable {
         this.ID = ID;
     }
 
-    public ArrayList<Integer> getRateMe() {
+    public ArrayList<Double> getRateMe() {
         return rateMe;
     }
 
-    public int getAvgRate() {
+    public Double getAvgRate() {
 
-        int back = 0;
+        double back = 0;
 
         for (int i = 0; i < this.rateMe.size() ; ++i){
             back += this.rateMe.get(i);
         }
 
+        back = (back)/ (double) this.rateMe.size();
+
         return back;
     }
 
-    public void setRateMe(int putMeIn) {
+    public void setRateMe(Double putMeIn) {
         this.rateMe.add(putMeIn);
     }
 
@@ -173,11 +175,13 @@ public class Vender implements Comparable {
         }
 
         else if (this.getSortBy().equals("High Ratings")) {
+            Log.d(TAG, " high me ");
             return ratingCalc(o);
 
         }
 
         else if (this.getSortBy().equals("Low Ratings")) {
+            Log.d(TAG, " low me ");
             return -(ratingCalc(o));
         }
 
@@ -192,12 +196,14 @@ public class Vender implements Comparable {
 
     private int ratingCalc(Object o) {
 
-        ArrayList<Integer> one = this.getRateMe();
-        ArrayList<Integer> two = ((Vender)o).getRateMe();
+        ArrayList<Double> one = this.getRateMe();
+        ArrayList<Double> two = ((Vender)o).getRateMe();
 
 
         int divideAvgFirst = one.size();
         int divideAvgSecond = two.size();
+
+        Log.d(TAG, " Done: " + divideAvgFirst + "    Dtwo: " + divideAvgSecond);
 
 
         if (divideAvgFirst == 0 && divideAvgSecond == 0) {
@@ -213,20 +219,11 @@ public class Vender implements Comparable {
         }
 
 
-        int first = 0;
-        int second = 0;
 
-        for (int i = 0; i < one.size(); ++i) {
-            first += one.get(i);
-        }
+        double first = this.getAvgRate();
+        double second = ((Vender)o).getAvgRate();
 
-        for (int i = 0; i < two.size(); ++i) {
-            second += two.get(i);
-        }
-
-
-        first = first/divideAvgFirst;
-        second = second/divideAvgSecond;
+        Log.d(TAG, " one: " + first + "    two: " + second);
 
         if (first > second) {
             return 1;

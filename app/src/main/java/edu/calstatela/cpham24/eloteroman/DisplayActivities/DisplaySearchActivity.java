@@ -149,23 +149,12 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
         Log.d(TAG, " wwww " + latitude + " and " + longitude);
 
 
-        Intent intent = getIntent();
-
-        Bundle extras = intent.getExtras();
-        if(extras != null) {
-            String back = extras.getString("query");
-            search.setText(back);
-            load(back);
-        }
-         else {
-            load(null);
-        }
-
+        load(null);
 
 
     }
 
-//location code provided by this sample
+    //location code provided by this sample
 //https://github.com/keithweaver/Android-Samples/blob/master/Location/GetLocationAndroidM/app/src/main/java/com/weaverprojects/getlocationandroidm/MainActivity.java
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -275,6 +264,14 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onItemClick(int clickedItemIndex, String vendId) {
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        progress.setVisibility(View.GONE);
 
     }
 
@@ -391,7 +388,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
                     e.printStackTrace();
                 }
 
-
+/*
                 String green = null;
                 for (int i = 0; i < result.size(); ++i) {
 
@@ -412,7 +409,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
                     Log.d(TAG, " where21 " + result.get(i).getRateMe());
 
                 }
-
+*/
 
 
                 rateLimit(result, args.getString("rate min"), args.getString("rate max"));
@@ -431,7 +428,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
         if (raMin != null && raMin.length() > 0 && !raMin.contains("null")) {
             for (int i = 0; i < result.size(); ++i) {
-                if (result.get(i).getAvgRate() < Integer.parseInt(raMin)) {
+                if (result.get(i).getAvgRate() < Double.parseDouble(raMin)) {
 
                     result.remove(i);
                     --i;
@@ -442,7 +439,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
         if (raMax != null && raMax.length() > 0 && !raMax.contains("null")) {
             for (int i = 0; i < result.size(); ++i) {
-                if (result.get(i).getAvgRate() < Integer.parseInt(raMax)) {
+                if (result.get(i).getAvgRate() < Double.parseDouble(raMax)) {
 
                     result.remove(i);
                     --i;
