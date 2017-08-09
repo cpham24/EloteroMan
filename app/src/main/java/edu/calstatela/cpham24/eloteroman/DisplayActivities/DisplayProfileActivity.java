@@ -183,7 +183,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
             if(cartList!=null) {
                 mcartAdapter = new favoriteCartAdapter(cartList, new favoriteCartAdapter.ItemClickListener() {
                     @Override
-                    public void onItemClick(int clickedItemIndex,String cartId) {
+                    public void onItemClick(int clickedItemIndex, String cartId) {
 
                         Log.d(TAG, String.format("id: %s", cartId));
                         Toast.makeText(context, "id: "+cartId, Toast.LENGTH_SHORT).show();
