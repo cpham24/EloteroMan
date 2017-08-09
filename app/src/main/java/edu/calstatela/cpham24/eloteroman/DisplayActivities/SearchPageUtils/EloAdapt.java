@@ -109,12 +109,6 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
                         .into(thu);
             }
 
-            else {
-                Picasso.with(context)
-                        .load("http://www.pixempire.com/images/preview/work-completed-icon.jpg")
-                        .into(thu);
-            }
-
 
 
             vendId = repo.getID();
