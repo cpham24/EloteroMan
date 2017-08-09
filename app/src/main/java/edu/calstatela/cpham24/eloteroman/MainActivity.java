@@ -51,7 +51,5 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(context, "Your name is blank",Toast.LENGTH_SHORT).show();
             }
         });
-
-        usernameET.clearFocus();
     }
 }
