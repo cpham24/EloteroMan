@@ -110,7 +110,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
             }
 
 
-            Log.d(TAG, "repo id is " + repo.getID());
+
             vendId = repo.getID();
 
         }
