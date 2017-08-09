@@ -3,11 +3,11 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:hint="Tap here to Search"
+        android:text="Tap here to Search"
         android:textSize="16dp"/>
 
 </LinearLayout>
