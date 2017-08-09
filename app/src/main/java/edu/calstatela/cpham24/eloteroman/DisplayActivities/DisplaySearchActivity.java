@@ -536,6 +536,10 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
                 public void onItemClick(int clickedItemIndex, String vendId) {
                     //click stuff
                     //probably start activity to go to vendor page
+                    Log.d(TAG, "clicked on item " + clickedItemIndex + " with " + vendId);
+                    Intent i = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
+                    i.putExtra("vendor_id", vendId);
+                    startActivity(i);
                 }
             });
             rv.setAdapter(adapter);
@@ -573,6 +577,10 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
                 public void onItemClick(int clickedItemIndex, String vendId) {
                     //click stuff
                     //probably start activity to go to vendor page
+                    Log.d(TAG, "clicked on item " + clickedItemIndex + " with " + vendId);
+                    Intent i = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
+                    i.putExtra("vendor_id", vendId);
+                    startActivity(i);
                 }
             });
             rv.setAdapter(adapter);
@@ -591,6 +599,10 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
                 public void onItemClick(int clickedItemIndex, String vendId) {
                     //click stuff
                     //probably start activity to go to vendor page
+                    Log.d(TAG, "clicked on item " + clickedItemIndex + " with " + vendId);
+                    Intent i = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
+                    i.putExtra("vendor_id", vendId);
+                    startActivity(i);
                 }
             });
             rv.setAdapter(adapter);
