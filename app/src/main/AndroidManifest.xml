@@ -66,6 +66,12 @@
         <activity android:name=".DisplayActivities.DisplaySearchActivity"
                   android:label="@string/display_search_name"
                   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplayReviewActivity"
+            android:label="@string/display_review_page"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DisplayActivities.DisplayVendorReviewsActivity"
+            android:label="@string/display_vendor_reviews_page"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
