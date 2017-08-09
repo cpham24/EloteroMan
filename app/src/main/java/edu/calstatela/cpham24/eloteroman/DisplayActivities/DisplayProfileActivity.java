@@ -1,6 +1,7 @@
 package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -11,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,7 +44,6 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     private SharedPreferences userPrefs;
     String USER_PREFS="user";
     Context context=this;
-    final String id = "596d335cb158f84ac6fb474d";
     static final String TAG = "profileActivity";
     String user_id;
     user current_user;
@@ -52,6 +54,8 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     ArrayList<favoriteCart> cartList=new ArrayList<favoriteCart>();
     ArrayList<String> ids;
     String imageUrl;
+    ImageButton logoutBtn;
+    Button editBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
         isPublicTV =(TextView) findViewById(R.id.isPublicView);
         foodCartsTV =(TextView) findViewById(R.id.favoriteFoodCartsView);
         pictureIV =(ImageView) findViewById(R.id.avatarView);
+        logoutBtn   = (ImageButton) findViewById(R.id.logout_btn);
+        editBtn = (Button) findViewById(R.id.edit_user_btn);
 
 
         userPrefs = getSharedPreferences(USER_PREFS, 0);
@@ -77,13 +83,34 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
         if(isLoggedIn){
             user_id=userPrefs.getString("id","");
-            Toast.makeText(this, "User id: " +id, Toast.LENGTH_SHORT).show();
-            Log.d("Comments", "_______________________wasAlreadyLoggedIn______________________");
+            Toast.makeText(this, "User id: " +user_id, Toast.LENGTH_SHORT).show();
+
         }else{
-            Log.d("Comments", "_______________________notLoggedIn______________________");
-            user_id=id;
+            launchLogin();
         }
-        Log.d("Comments", "_______________________onCreate______________________");
+
+        logoutBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+
+                userPrefs = getSharedPreferences(USER_PREFS, 0);
+                SharedPreferences.Editor edit=userPrefs.edit();
+                edit.putString("id",null);
+                edit.putBoolean("isLoggedIn",false);
+                edit.commit();
+                launchLogin();
+            }
+        });
+
+        editBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         load();
 
     }
@@ -102,15 +129,15 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
                 //makes progress bar visible
                 if (current_user==null)
                     mProgress.setVisibility(View.VISIBLE);
-                Log.d("Comments", "_______________________onStartLoading______________________");
+
             }
 
             @Override
             public Void loadInBackground() {
-                Log.d("Comments", "_______________________callingBuildURL______________________");
+
                 URL url=JNetworkUtils.buildUrlGetOneUser(user_id);
 
-                Log.d("Comments", "_______________________onLoadInBackground______________________");
+
                 try {
 
                     String json = JNetworkUtils.getResponseFromHttpUrl(url);
@@ -133,11 +160,10 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
                         try {
 
 
-                            Log.d("Comments", "_______________________here1?______________________");
+
                             String cart_json = JNetworkUtils.getResponseFromHttpUrl(cart_url);
-                            Log.d("Comments", "_______________________here2?______________________");
                             current_cart = JNetworkUtils.parseFavoriteCartJSON(cart_json);
-                            Log.d("Comments", "_______________________here3?______________________");
+
 
 
 
@@ -147,7 +173,7 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d("Comments", "_______________________here4?______________________");
+
 
                         if(current_cart!=null) {
                             cartList.add(current_cart);
@@ -167,7 +193,6 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
 
     @Override
     public void onLoadFinished(Loader<Void> loader,Void data) {
-        Log.d("Comments", "_______________________onLoadFinished______________________");
         if(current_user!=null){
             mProgress.setVisibility(View.GONE);
             usernameTV.setText(current_user.getUsername());
@@ -204,9 +229,15 @@ public class DisplayProfileActivity extends AppCompatActivity implements LoaderM
     }
 
     public void load() {
-        Log.d("Comments", "_______________________load______________________");
+
         LoaderManager loaderManager = getSupportLoaderManager();
         loaderManager.restartLoader(USER_LOADER_ID, bundleForLoader, this).forceLoad();
 
     }
+
+    public void launchLogin() {
+        Intent i = new Intent(this, DisplayLoginActivity.class);
+        startActivity(i);
+    }
+
 }

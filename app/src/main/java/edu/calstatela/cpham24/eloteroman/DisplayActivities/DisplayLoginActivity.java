@@ -77,6 +77,8 @@ public class DisplayLoginActivity extends AppCompatActivity implements LoaderMan
         };
     }
 
+
+
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
         if(current_user!=null){
