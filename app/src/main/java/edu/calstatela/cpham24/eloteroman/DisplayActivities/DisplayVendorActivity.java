@@ -41,6 +41,8 @@ public class DisplayVendorActivity extends AppCompatActivity {
     private String vendorID;
     private TextView ownerName;
     private TextView cartName;
+    private TextView workingHours;
+    private TextView workingNow;
     private ImageView cartImage;
     private String getOneCartURL = "http://162.243.112.34:3000/Eloteroman/getOneCart?id=";
     private String TAG = "DEBUG";
@@ -68,6 +70,8 @@ public class DisplayVendorActivity extends AppCompatActivity {
         ownerName = (TextView) findViewById(R.id.ownerNameTextView);
         cartName = (TextView) findViewById(R.id.cartNameTextView);
         cartImage = (ImageView) findViewById(R.id.cartImageView);
+        workingHours = (TextView) findViewById(R.id.workingHoursTextView);
+        workingNow = (TextView) findViewById(R.id.workingNowTextView);
 
         getCartInfo(getOneCartURL + vendorID);
 
@@ -86,7 +90,8 @@ public class DisplayVendorActivity extends AppCompatActivity {
                             if(!response.getString("picture").equals("NA")){
                                 Picasso.with(context).load(response.getString("picture")).into(cartImage);
                             }
-
+                            workingHours.setText("Hours: " + response.getString("hours"));
+                            workingNow.setText(response.getString("currentlyInService"));
                             foodItems = response.getJSONArray("foodList");
                             for(int i = 0; i < foodItems.length(); i++){
                                 JSONObject jsonObject = (JSONObject) foodItems.get(i);
