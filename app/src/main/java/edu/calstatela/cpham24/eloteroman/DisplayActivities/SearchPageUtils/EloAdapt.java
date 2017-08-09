@@ -1,12 +1,16 @@
 package edu.calstatela.cpham24.eloteroman.DisplayActivities.SearchPageUtils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,7 +39,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
     }
 
     public interface ItemClickListener {
-        void onItemClick(int clickedItemIndex);
+        void onItemClick(int clickedItemIndex, String vendId);
     }
 
     @Override
@@ -63,6 +67,8 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
         TextView desc;
         TextView worH;
         TextView worY;
+        ImageView thu;
+        String vendId;
 
         ItemHolder(View view){
             super(view);
@@ -70,6 +76,8 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
             desc = (TextView)view.findViewById(R.id.venderDesc);
             worH = (TextView)view.findViewById(R.id.venderHour);
             worY = (TextView)view.findViewById(R.id.venderIsWork);
+            thu = (ImageView)view.findViewById(R.id.imgYes) ;
+
 
             view.setOnClickListener(this);
         }
@@ -78,25 +86,45 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
             Vender repo = data.get(pos);
 
             name.setText(repo.getName());
-            desc.setText(repo.getDesc());
+            desc.setText("Works: " + repo.getDesc());
             worH.setText(repo.getWorkHour());
 
             if (repo.getWork() == true) {
                 worY.setText("Currently Working");
+                worY.setTextColor(Color.GREEN);
             }
 
             else {
                 worY.setText("Not Working");
+                worY.setTextColor(Color.RED);
             }
 
+            String thuUrl = repo.getPicture();
+
             Log.d(TAG , " hmm");
+
+            if(thuUrl != null && thuUrl.length() > 8){
+                Picasso.with(context)
+                        .load(thuUrl)
+                        .into(thu);
+            }
+
+            else {
+                Picasso.with(context)
+                        .load("http://www.pixempire.com/images/preview/work-completed-icon.jpg")
+                        .into(thu);
+            }
+
+
+
+            vendId = repo.getID();
 
         }
 
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            listener.onItemClick(pos);
+            listener.onItemClick(pos, vendId);
         }
     }
 

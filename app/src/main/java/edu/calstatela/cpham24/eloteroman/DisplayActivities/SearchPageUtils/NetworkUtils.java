@@ -42,7 +42,7 @@ public class NetworkUtils {
         Uri uri;
 
         uri = Uri.parse(ELO_BASE_URL + getCarts).buildUpon()
-                    .build();
+                .build();
 
 
 
@@ -130,6 +130,7 @@ public class NetworkUtils {
             JSONObject item = items.getJSONObject(i);
             String rot = item.getString(API_LOCATION_ID);
             Log.d(TAG , " find the id: " + rot);
+            String picture = item.getString("picture");
             String Oname = item.getString("ownerName");
             String name = item.getString("cartName");
             String stree = item.getString("street");
@@ -145,10 +146,29 @@ public class NetworkUtils {
 
             for (int g = 0; g < there.length; ++g) {
                 there[g] = fair.getString(g);
+                Log.d(TAG, " let see " + there[g]);
             }
 
-            double lat = Double.parseDouble(there[0]);
-            double lon = Double.parseDouble(there[1]);
+            double lat = 0.0;
+            double lon = 0.0;
+
+            if (there[0] != null && there[0].length() > 0 && !there[0].contains("null")) {
+                Log.d(TAG, " you aint trying " + there[0] + there[0].length());
+                lat = Double.parseDouble(there[0]);
+            }
+
+            else {
+                continue;
+            }
+
+            if (there[1] != null && there[1].length() > 0 && !there[1].contains("null")) {
+                lon = Double.parseDouble(there[1]);
+            }
+
+            else {
+                continue;
+            }
+
             Log.d(TAG , " come " + Oname + " + " + check);
 
             if (check != null) {
@@ -158,7 +178,7 @@ public class NetworkUtils {
                         Oname.toLowerCase().contains(check.toLowerCase()) || stree.toLowerCase().contains(check.toLowerCase())){
                     Log.d(TAG , " name here " + name);
                     Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                            sorted, rot);
+                            sorted, rot, picture);
                     result.add(repo);
                     Log.d(TAG, " where8 " + result);
                 }
@@ -172,7 +192,7 @@ public class NetworkUtils {
 
                         if (foodName.toLowerCase().contains(check.toLowerCase())) {
                             Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                                    sorted, rot);
+                                    sorted, rot, picture);
                             result.add(repo);
                             Log.d(TAG, " where9 " + result);
                             break;
@@ -186,7 +206,7 @@ public class NetworkUtils {
 
             else {
                 Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitude,
-                        sorted, rot);
+                        sorted, rot, picture);
                 result.add(repo);
             }
 
@@ -212,6 +232,7 @@ public class NetworkUtils {
 
             JSONObject item = items.getJSONObject(i);
             String rot = item.getString(API_LOCATION_ID);
+            String picture = item.getString("picture");
             String Oname = item.getString("ownerName");
             String name = item.getString("cartName");
             String desc = item.getString("days");
@@ -229,8 +250,26 @@ public class NetworkUtils {
                 there[g] = fair.getString(g);
             }
 
-            double lat = Double.parseDouble(there[0]);
-            double lon = Double.parseDouble(there[1]);
+            double lat = 0;
+            double lon = 0;
+
+            if (there[0] != null && there[0].length() > 0 && !there[0].contains("null")) {
+                lat = Double.parseDouble(there[0]);
+            }
+
+            else {
+                continue;
+            }
+
+            if (there[1] != null && there[1].length() > 0 && !there[1].contains("null")) {
+                lon = Double.parseDouble(there[1]);
+            }
+
+            else {
+                continue;
+            }
+
+
 
             if(check.getString("ownerName") != null) {
                 if (!(Oname.toLowerCase().contains(check.getString("ownerName").toLowerCase()))) {
@@ -317,7 +356,7 @@ public class NetworkUtils {
 
 
             Vender repo = new Vender(name, desc, WoH, WoY, lat, lon, latitude, longitutde,
-                    sorted, rot);
+                    sorted, rot, picture);
             result.add(repo);
 
 
