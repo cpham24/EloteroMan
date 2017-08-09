@@ -141,6 +141,7 @@ public class DisplayMapActivity extends AppCompatActivity implements ActivityCom
             handler.removeCallbacks(runner);
             handler = null;
             runner = null;
+            handlerThread.quit();
             handlerThread = null;
         }
     }
