@@ -39,7 +39,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
     }
 
     public interface ItemClickListener {
-        void onItemClick(int clickedItemIndex);
+        void onItemClick(int clickedItemIndex, String vendId);
     }
 
     @Override
@@ -68,6 +68,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
         TextView worH;
         TextView worY;
         ImageView thu;
+        String vendId;
 
         ItemHolder(View view){
             super(view);
@@ -76,6 +77,7 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
             worH = (TextView)view.findViewById(R.id.venderHour);
             worY = (TextView)view.findViewById(R.id.venderIsWork);
             thu = (ImageView)view.findViewById(R.id.imgYes) ;
+
 
             view.setOnClickListener(this);
         }
@@ -113,12 +115,16 @@ public class EloAdapt extends RecyclerView.Adapter<EloAdapt.ItemHolder>{
                         .into(thu);
             }
 
+
+
+            vendId = repo.getID();
+
         }
 
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            listener.onItemClick(pos);
+            listener.onItemClick(pos, vendId);
         }
     }
 

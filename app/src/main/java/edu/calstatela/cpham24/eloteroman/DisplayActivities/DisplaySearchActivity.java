@@ -2,6 +2,7 @@ package edu.calstatela.cpham24.eloteroman.DisplayActivities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -262,7 +263,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
 
     @Override
-    public void onItemClick(int clickedItemIndex) {
+    public void onItemClick(int clickedItemIndex, String vendId) {
 
     }
 
@@ -462,9 +463,13 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
         else {
             EloAdapt adapter = new EloAdapt(s, new EloAdapt.ItemClickListener() {
                 @Override
-                public void onItemClick(int clickedItemIndex) {
-                    //click stuff
-                    //probably start activity to go to vendor page
+                public void onItemClick(int clickedItemIndex, String vendId) {
+                    Intent intent = new Intent(DisplaySearchActivity.this, DisplayVendorActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString("vendor_id", vendId ); //Your id
+                    intent.putExtras(b); //Put your id to your next Intent
+                    startActivity(intent);
+
                 }
             });
             rv.setAdapter(adapter);
@@ -509,7 +514,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
             EloAdapt adapter = new EloAdapt(dayChoice, new EloAdapt.ItemClickListener() {
                 @Override
-                public void onItemClick(int clickedItemIndex) {
+                public void onItemClick(int clickedItemIndex, String vendId) {
                     //click stuff
                     //probably start activity to go to vendor page
                 }
@@ -546,7 +551,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
 
             EloAdapt adapter = new EloAdapt(dayChoice, new EloAdapt.ItemClickListener() {
                 @Override
-                public void onItemClick(int clickedItemIndex) {
+                public void onItemClick(int clickedItemIndex, String vendId) {
                     //click stuff
                     //probably start activity to go to vendor page
                 }
@@ -564,7 +569,7 @@ public class DisplaySearchActivity extends AppCompatActivity implements LoaderMa
             Collections.sort(forAll);
             EloAdapt adapter = new EloAdapt(forAll, new EloAdapt.ItemClickListener() {
                 @Override
-                public void onItemClick(int clickedItemIndex) {
+                public void onItemClick(int clickedItemIndex, String vendId) {
                     //click stuff
                     //probably start activity to go to vendor page
                 }
